@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Student</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'assets/css/add_up.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Cập nhật thông tin sinh viên</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Lưu thông tin</button>
+        </form>
+        <a href="{% url 'demo' %}">Trở lại</a>
+    </div>
+</body>
+</html>

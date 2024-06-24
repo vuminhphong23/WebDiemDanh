@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture Image</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Định dạng phần tử chứa hình nền */
+        .container {
+            text-align: center;
+        }
+
+        /* Định dạng tiêu đề */
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        /* Định dạng nút */
+        input[type="submit"] {
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Capture Image for Student {{ student_id }} - {{ name }}</h1>    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="submit" value="Capture Images">
+    </form>
+    
+</body>
+</html>
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture Image</title>
+    <style>
+        #camera {
+            width: 100%;
+            max-width: 600px;
+        }
+    </>
+</head>
+<body>
+    <h1>Capture Image for Student {{ student_id }} - {{ name }}</h1>
+    
+    <form id="capture-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" id="student_id" name="student_id" value="{{ student_id }}">
+        <input type="hidden" id="name" name="name" value="{{ name }}">
+        <div>
+            <video id="camera" autoplay></video>
+        </div>
+        <input type="submit" value="Submit Images">
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('camera');
+            const form = document.getElementById('capture-form');
+            let capturedImages = [];
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(error => {
+                    console.error('Error accessing webcam:', error);
+                });
+
+            document.addEventListener('keydown', event => {
+                if (event.key === 'c') {
+                    captureImage();
+                }
+            });
+
+            function captureImage() {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                const imageDataUrl = canvas.toDataURL('image/jpeg');
+                capturedImages.push(imageDataUrl);
+
+                // Submit images in chunks to avoid exceeding upload limit
+                if (capturedImages.length >= 5) {
+                    submitImages();
+                }
+            }
+
+            function submitImages() {
+                const formData = new FormData(form);
+                capturedImages.forEach((img, index) => {
+                    formData.append('images[]', img);
+                });
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.text())
+                .then(result => {
+                    alert(result);
+                    capturedImages = []; // Clear images after submission
+                })
+                .catch(error => {
+                    console.error('Error submitting images:', error);
+                });
+            }
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                submitImages();
+            });
+        });
+    </script>
+</body>
+</html> -->

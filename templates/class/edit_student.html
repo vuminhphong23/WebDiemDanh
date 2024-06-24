@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Student</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'assets/css/add_up.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Sửa thông tin sinh viên</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>
