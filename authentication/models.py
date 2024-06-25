@@ -6,6 +6,7 @@ class Classroom(models.Model):
     class_id = models.AutoField(primary_key=True)
     class_name = models.CharField(max_length=100)
     teacher_name = models.CharField(max_length=100)
+    subject = models.CharField(max_length=100)
 
     def __str__(self):
         return self.class_name
@@ -18,7 +19,7 @@ class TblStudents(models.Model):
     iCap = models.BooleanField(default=False)
     date_birth = models.DateField()
     password = models.CharField(max_length=128, default=make_password('abc@123'))
-    classrooms = models.ManyToManyField(Classroom, related_name='students')
+    classrooms = models.ManyToManyField(Classroom, related_name='students',blank=True)
 
     def __str__(self):
         return self.name
