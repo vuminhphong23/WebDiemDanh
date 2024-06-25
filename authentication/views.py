@@ -137,18 +137,33 @@ def signin(request):
     if request.method == 'POST':
         username = request.POST['username']
         pass1 = request.POST['pass1']
-        
+        role = request.POST['is_superuser']
+
         user = authenticate(username=username, password=pass1)
         
         if user is not None:
-            login(request, user)
-            fname = user.first_name
-            messages.success(request, "Logged In Sucessfully!!")
-            # return render(request, "authentication/index.html",{"fname":fname})
-            return render(request, "authentication/index.html",{"fname":fname})
-        else:
-            messages.error(request, "Bad Credentials!!")
-            return redirect('home')
+            if role == 'teacher':
+                login(request, user)
+                fname = user.first_name
+                messages.success(request, "Logged In Successfully as Teacher!")
+                return render(request, "authentication/index.html",{"fname":fname})
+            else:
+                messages.error(request, "Invalid role for this user!")
+                return redirect('signin')
+        elif role == 'student':
+            try:
+                student = TblStudents.objects.get(email=username)
+                if student.check_password(pass1):
+                    request.session['student_id'] = student.student_id
+                    request.session['student_name'] = student.name
+                    messages.success(request, "Logged In Successfully as Student!")
+                    return render(request, "student/profile.html", {"fname": student.name, "student_id": student.student_id})
+                else:
+                    messages.error(request, "Bad Credentials for Student!")
+            except TblStudents.DoesNotExist:
+                messages.error(request, "Bad Credentials!")
+            
+            return redirect('signin')
     
     return render(request, "authentication/signin.html")
 

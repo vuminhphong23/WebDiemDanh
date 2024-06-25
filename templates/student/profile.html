@@ -1,11 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Student Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            color: #333;
+        }
+        .info {
+            margin-top: 20px;
+        }
+        .info p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-    <h1>abcbcbcbc</h1>
+    <div class="container">
+        <h2>Welcome, {{ fname }}!</h2>
+        <div class="info">
+            <p><strong>Student ID:</strong> {{ student_id }}</p>
+            <!-- Bạn có thể thêm các thông tin khác của sinh viên tại đây -->
+        </div>
+    </div>
 </body>
 </html>
