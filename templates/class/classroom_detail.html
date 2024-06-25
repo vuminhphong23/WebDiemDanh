@@ -198,7 +198,7 @@
                             <td>${student.date_birth}</td>
                             <td><button class="delete-button" data-url="{% url 'delete_student' 0 %}".replace('0', student.student_id)">Xóa</button></td>
                             <td><a href="{% url 'edit_student' 0 %}".replace('0', student.student_id)><button>Sửa</button></a></td>
-                            <td><a href="{% url 'aa' 0 0 %}".replace('0', student.student_id).replace('0', student.name)><button>Đăng kí ảnh</button></a></td>
+                            <td><a href="{% url 'cappicture' 0 0 %}".replace('0', student.student_id).replace('0', student.name)><button>Đăng kí ảnh</button></a></td>
                         </tr>
                     `);
                 });
@@ -256,7 +256,7 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item menu-open">
-            <a href="/bostt" class="nav-link">
+            <a href="/dashboard" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Tổng quan
@@ -356,46 +356,7 @@
 
     <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
-    <!-- <div class="container">
-        <a href="{% url 'add_student' classroom.class_id %}"><button id="new3">Thêm sinh viên</button></a>
-        <a href="{% url 'embeddings' %}"><button id="new3">Hoàn tất</button></a>
-        <table id="customers" border="1">
-            <thead>
-                <tr>
-                    <th>Student ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Date of Birth</th>
-                    <th colspan="3" id="mid">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for student in students %}
-                <tr>
-                    <td>{{ student.student_id }}</td>
-                    <td>{{ student.name }}</td>
-                    <td>{{ student.email }}</td>
-                    <td>{{ student.phone }}</td>
-                    <td>{{ student.date_birth }}</td>
-                    <td>
-                        <a href="{% url 'delete_student' student.student_id %}"><button id="del">Xóa</button></a>
-                    </td>
-                    <td>
-                      <a href="{% url 'edit_student' student.student_id %}"><button id="up">Sửa</button></a>
-                    </td>
-                    <td>
-                      <a href="{% url 'aa' student.student_id student.name %}">
-                          <button id="img_regis">Đăng kí ảnh</button>
-                      </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table> -->
-        
-        
+      <div class="container-fluid">    
         <div class="container">
           <div class="action-container">
             <a href="{% url 'add_student' classroom.class_id %}"><button id="new3">Thêm sinh viên</button></a>
@@ -426,52 +387,18 @@
                 <td>{{ student.email }}</td>
                 <td>{{ student.phone }}</td>
                 <td>{{ student.date_birth }}</td>
-                <!-- <td><button class="delete-button" data-url="{% url 'delete_student' student.student_id %}">Xóa</button></td> -->
-                <!-- <td><a href="{% url 'edit_student' student.student_id %}"><button>Sửa</button></a></td> -->
-                 
+
                 <td><button class="delete-button" data-url="{% url 'delete_student' student.student_id %}"><i class="fa-solid fa-trash" style="color: #bb180c;"></i></button></td>
                 <td><a href="{% url 'edit_student' student.student_id %}"><button class="" href="{% url 'edit_student' student.student_id %}"><i class="fa-regular fa-pen-to-square" style="color: #6c9ef4;"></i></button></a></td>
                 <td><a href="{% url 'edit_student' student.student_id %}"><button class="" href="{% url 'edit_student' student.student_id %}"><i class="fa-solid fa-up-right-from-square" style="color: #142138;"></i></button></a></td>
-                <!-- <td><a href="{% url 'edit_student' student.student_id %}"><i class="fa-solid fa-pen-to-square fa-lg" style="color: #123a59;"></i></i></a></td> -->
-
-                <td><a href="{% url 'aa' student.student_id student.name %}"><button><i class="fa-solid fa-camera-retro" style="color: #16356a;"></i></button></a></td>
-                <!-- <td><a href="{% url 'aa' student.student_id student.name %}"><button>Đăng kí ảnh</button></a></td> -->
+                <td><a href="{% url 'cappicture' student.student_id student.name %}"><button><i class="fa-solid fa-camera-retro" style="color: #16356a;"></i></button></a></td>
+                
             </tr>
             {% endfor %}
         </tbody>
           </table>
-
-
-          <!-- <table id="customers" border="1">
-              <thead>
-                  <tr>
-                      <th>Student ID</th>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Phone</th>
-                      <th>Date of Birth</th>
-                      <th colspan="3" id="mid">Action</th>
-                  </tr>
-              </thead>
-              <tbody id="student-list">
-                  {% for student in students %}
-                  <tr>
-                      <td>{{ student.student_id }}</td>
-                      <td>{{ student.name }}</td>
-                      <td>{{ student.email }}</td>
-                      <td>{{ student.phone }}</td>
-                      <td>{{ student.date_birth }}</td>
-                      <td><button class="delete-button" data-url="{% url 'delete_student' student.student_id %}">Xóa</button></td>
-                      <td><a href="{% url 'edit_student' student.student_id %}"><button>Sửa</button></a></td>
-                      <td><a href="{% url 'aa' student.student_id student.name %}"><button>Đăng kí ảnh</button></a></td>
-                  </tr>
-                  {% endfor %}
-              </tbody>
-          </table> -->
       </div>        
     </div>
-
-
       </div>
     </section>
   </div>

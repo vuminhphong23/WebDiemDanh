@@ -9,7 +9,6 @@ from django.shortcuts import redirect
 import firebase_admin
 from firebase_admin import credentials, storage
 
-
 # Function to enhance image by applying denoising and smoothing
 def enhance_image(image):
     # Làm sạch nhiễu bằng Gaussian Blur
@@ -41,6 +40,7 @@ def augment_images(images):
         augmented_images.append(rotated_image)
     return augmented_images
 
+
 def upload_to_firebase(image, folder, image_name):
     bucket = storage.bucket()
     blob = bucket.blob(f'{folder}/{image_name}')
@@ -48,7 +48,7 @@ def upload_to_firebase(image, folder, image_name):
     blob.upload_from_string(img_encoded.tobytes(), content_type='image/jpeg')
     print(f'Uploaded {image_name} to {folder}.')
 
-def capture_images(name):
+def capture_images(student_id, name):
     cap = cv2.VideoCapture(0)
     detector = MTCNN()
     img_count = 0
@@ -85,74 +85,6 @@ def capture_images(name):
     train_images, val_images = train_test_split(augmented_images, test_size=0.33, random_state=42)
     
     for i, img in enumerate(train_images):
-        upload_to_firebase(img, f'train/{name}', f'{name}_{i+1}.jpg')
+        upload_to_firebase(img, f'train/{student_id}_{name}', f'{student_id}_{name}_{i+1}.jpg')
     for i, img in enumerate(val_images):
-        upload_to_firebase(img, f'val/{name}', f'{name}_{i+1}.jpg')
-
-# Function to capture 10 images from the webcam
-# def capture_images(name, save_dir='F:/thiGiac_doAn/GFG---Django-Login-System-main/Face/dataset_split'):
-#     # Create directories if not exist
-#     train_dir = os.path.join(save_dir, 'train', name)
-#     val_dir = os.path.join(save_dir, 'val', name)
-#     os.makedirs(train_dir, exist_ok=True)
-#     os.makedirs(val_dir, exist_ok=True)
-
-#     cap = cv2.VideoCapture(0)
-#     detector = MTCNN()
-#     img_count = 0
-#     captured_images = []
-
-#     print("Press 'c' to capture image. Press 'q' to quit.")
-#     while img_count < 10:
-        
-#         ret, frame = cap.read()
-#         if not ret:
-#             break
-#         frame = cv2.flip(frame, 1)
-#         # Display the frame
-#         cv2.imshow('Capturing Images', frame)
-        
-        
-#         # Check for key press
-#         key = cv2.waitKey(1)
-#         if key & 0xFF == ord('c'):
-#             results = detector.detect_faces(frame)
-#             if results:
-#                 x1, y1, width, height = results[0]['box']
-#                 x1, y1 = abs(x1), abs(y1)
-#                 x2, y2 = x1 + width, y1 + height
-#                 face = frame[y1:y2, x1:x2]
-#                 face = cv2.resize(face, (160, 160))
-#                 # Enhance the captured face image
-#                 face = enhance_image(face)
-#                 captured_images.append(face)
-#                 img_count += 1
-#                 print(f"Captured image {img_count}")
-#         elif key & 0xFF == ord('q'):
-#             break
-
-#     cap.release()
-#     cv2.destroyAllWindows()
-    
-#     # Augment captured images
-#     augmented_images = augment_images(captured_images)
-    
-#     # Split the images into training and validation sets
-#     train_images, val_images = train_test_split(augmented_images, test_size=0.33, random_state=42)
-    
-#     # Save images
-#     for i, img in enumerate(train_images):
-#         cv2.imwrite(os.path.join(train_dir, f'{name}_{i+1}.jpg'), img)
-#     for i, img in enumerate(val_images):
-#         cv2.imwrite(os.path.join(val_dir, f'{name}_{i+1}.jpg'), img)
-
-# def aa(request, student_id, name):
-#     if request.method == 'GET':
-#         return render(request, 'admin/capture_image.html', {'student_id': student_id, 'name': name})
-#     elif request.method == 'POST':
-#         capture_images(student_id, name)
-#         # Tạo URL classroom_id tương ứng và chuyển hướng đến đó
-#         classroom_id = 1  # Giả sử classroom_id được cố định là 1 trong ví dụ này
-#         return redirect(f'/classroom/{classroom_id}/')
-        
-    
+        upload_to_firebase(img, f'val/{student_id}_{name}', f'{student_id}_{name}_{i+1}.jpg')
