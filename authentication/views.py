@@ -157,7 +157,7 @@ def signin(request):
                     request.session['student_id'] = student.student_id
                     request.session['student_name'] = student.name
                     messages.success(request, "Logged In Successfully as Student!")
-                    return render(request, "student/profile.html", {"fname": student.name, "student_id": student.student_id})
+                    return render(request, "authentication/index.html", {"fname": student.name, "student_id": student.student_id})
                 else:
                     messages.error(request, "Bad Credentials for Student!")
             except TblStudents.DoesNotExist:

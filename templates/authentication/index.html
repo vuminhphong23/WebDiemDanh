@@ -152,9 +152,13 @@
         <div class="header">
             <ul>
                 {% if user.is_authenticated %} 
-                <!-- <li>{{fname}}</li> -->
+                <li>{{fname}}</li>
                 <li><button type="submit"><a href="/signout">Đăng xuất</a></button></li>
                 <li><button type="submit"><a href="/dashboard">Trang chủ</a></button></li>
+                {% elif request.session.student_id %}
+                <li>{{fname}}</li>
+                <li><button type="submit"><a href="/signout">Đăng xuất</a></button></li>
+                <li><button type="submit"><a href="/profile">Trang cá nhân</a></button></li>
                 {% else %}
                 <li><button type="submit"><a href="/signup">Đăng ký</a></button></li>
                 <li><button type="submit"><a href="/signin">Đăng nhập</a></button></li>
