@@ -65,6 +65,10 @@ def classroom_list_attendance(request):
     return render(request, 'attendance/classroom_list.html', {'classrooms': classrooms})
 
 def classroom_detail(request, class_id):
+    student_id = request.session.get('student_id')
+    student_name = request.session.get('student_name')
+    if student_id and student_name:
+        return redirect('home')
     classroom = get_object_or_404(Classroom, pk=class_id)
     students = classroom.students.all()
     return render(request, 'class/classroom_detail.html', {'classroom': classroom, 'students': students})

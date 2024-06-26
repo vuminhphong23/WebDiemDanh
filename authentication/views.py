@@ -31,6 +31,10 @@ def home(request):
     return render(request, "authentication/index.html")
 
 def classroom(request):
+    student_id = request.session.get('student_id')
+    student_name = request.session.get('student_name')
+    if student_id and student_name:
+        return redirect('signin')
     return render(request, "class/classroom_detail.html")
 
 def regisImg(request):
@@ -38,6 +42,10 @@ def regisImg(request):
 
 
 def dashboard(request):
+    student_id = request.session.get('student_id')
+    student_name = request.session.get('student_name')
+    if student_id and student_name:
+        return redirect('home')
     # Get the total number of students
     total_students = TblStudents.objects.count()
     total_class = Classroom.objects.count()
@@ -65,73 +73,6 @@ def cappicture(request, student_id, name):
 
 
 
-    
-
-    
-
-
-
-    
-
-
-# register logout login
-def signup(request):
-    if request.method == "POST":
-        username = request.POST['username']
-        fname = request.POST['fname']
-        role = request.POST['role']  
-        email = request.POST['email']
-        pass1 = request.POST['pass1']
-        pass2 = request.POST['pass2']
-        
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exist! Please try some other username.")
-            return redirect('signup')
-        
-        if User.objects.filter(email=email).exists():
-            messages.error(request, "Email Already Registered!!")
-            return redirect('signup')
-        
-        if len(username) > 20:
-            messages.error(request, "Username must be under 20 characters!!")
-            return redirect('signup')
-        
-        if pass1 != pass2:
-            messages.error(request, "Passwords didn't match!!")
-            return redirect('signup')
-        
-        if not username.isalnum():
-            messages.error(request, "Username must be Alpha-Numeric!!")
-            return redirect('signup')
-        
-        myuser = User.objects.create_user(username, email, pass1)
-        myuser.first_name = fname
-        myuser.last_name = role  
-        myuser.is_active = True  
-        myuser.is_staff = True 
-        myuser.save()
-        messages.success(request, "Your Account has been created successfully!!")
-        
-        return redirect('signin')
-        
-    return render(request, "authentication/signup.html")
-
-
-def activate(request, uidb64, token):
-    try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        myuser = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        myuser = None
-
-    if myuser is not None and generate_token.check_token(myuser, token):
-        myuser.is_active = True
-        myuser.save()
-        login(request, myuser)
-        messages.success(request, "Your Account has been activated!!")
-        return redirect('signin')
-    else:
-        return render(request, 'activation_failed.html')
 
 def signin(request):
     if request.method == 'POST':

@@ -12,8 +12,6 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('dashboard', views.dashboard, name='dashboard'),
     path('nguoidung', views.userthem, name='nguoidung'),
-    path('signup', views.signup, name='signup'),
-    path('activate/<uidb64>/<token>', views.activate, name='activate'),
     path('signin', views.signin, name='signin'),
     path('signout', views.signout, name='signout'),
     path('cappicture/<str:student_id>/<str:name>/', views.cappicture, name='cappicture'),
@@ -33,6 +31,7 @@ urlpatterns = [
     path('classroom_list_attendance', dashboardController.classroom_list_attendance, name='classroom_list_attendance'),
     path('student_list', dashboardController.student_list, name='student_list'),
     path('export-to-excel/', views.export_to_excel, name='export_to_excel'),
+    
     path('profile', profileController.view, name='profile'),
 
    
