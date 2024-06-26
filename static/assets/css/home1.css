@@ -107,7 +107,7 @@ a {
     background-size: 100%; /* Ensures the image covers the entire content area */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-position: left center; 
-    border-radius: 40px;
+    border-radius: 0px;
     background-color: #223771;
     margin-top: 10px;
     margin-right: 10px;

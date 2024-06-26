@@ -151,7 +151,7 @@
         <input type="text" placeholder="Tìm kiếm thông tin">
          <ul>
                 {% if user.is_authenticated %}   
-                <li>{{fname}}</li>
+                
                 <li><button type="submit"><a href="/dashboard">Trang chủ</a></button></li>
                 {% elif request.session.student_id %}
                 <!-- <li>{{fname}}</li> -->
