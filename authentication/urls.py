@@ -14,8 +14,6 @@ urlpatterns = [
     path('nguoidung', views.userthem, name='nguoidung'),
     path('signin', views.signin, name='signin'),
     path('signout', views.signout, name='signout'),
-    path('cappicture/<str:student_id>/<str:name>/', views.cappicture, name='cappicture'),
-    path('regisImg', views.regisImg, name='regisImg'),
     path('delete_student/<int:student_id>/', dashboardController.delete_student, name='delete_student'),
     path('diemdanh', camera.diemdanh, name='diemdanh'),
     path('classroom_list', dashboardController.classroom_list, name='classroom_list'),
@@ -33,6 +31,7 @@ urlpatterns = [
     path('export-to-excel/', views.export_to_excel, name='export_to_excel'),
     
     path('profile', profileController.view, name='profile'),
+    path('cappicture/<str:student_id>/<str:name>/', profileController.cappicture, name='cappicture'),
 
    
 

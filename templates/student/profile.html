@@ -1,41 +1,154 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Student Dashboard</title>
+    <title>Bảng Điều Khiển Sinh Viên</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #e9ecef;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
+
         .container {
             max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
+            width: 100%;
+            padding: 30px;
             background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            transition: transform 0.3s ease;
         }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
         h2 {
             color: #333;
+            text-align: center;
+            margin-bottom: 20px;
         }
+
         .info {
             margin-top: 20px;
         }
-        .info p {
-            margin: 5px 0;
+
+        .info label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .info input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
             font-size: 16px;
+            color: #555;
+        }
+
+        .info input[readonly] {
+            background-color: #f9f9f9;
+        }
+
+        .info button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .info button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Welcome, {{ fname }}!</h2>
-        <div class="info">
-            <p><strong>Student ID:</strong> {{ student_id }}</p>
-            <!-- Bạn có thể thêm các thông tin khác của sinh viên tại đây -->
-        </div>
+        <h2>Chào mừng, {{ fname }}!</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="info">
+                <label for="student_id">Mã Sinh Viên:</label>
+                <input type="text" id="student_id" name="student_id" value="{{ student_id }}" readonly>
+
+                <label for="name">Họ Tên:</label>
+                <input type="text" id="name" name="name" value="{{ name }}" readonly>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ email }}" readonly>
+
+                <label for="phone">Số Điện Thoại:</label>
+                <input type="text" id="phone" name="phone" value="{{ phone }}" readonly>
+
+                <label for="iCap">Trạng Thái iCap:</label>
+                <input type="text" id="iCap" name="iCap" value="{{ iCap }}" readonly>
+
+                <label for="date_birth">Ngày Sinh:</label>
+                <input type="date" id="date_birth" name="date_birth" value="{{ date_birth }}" readonly>
+
+                <button type="button" id="edit-btn">Chỉnh Sửa</button>
+                <button type="submit" id="save-btn" style="display:none;">Lưu</button>
+                    
+                <a href="/dashboard">Quay về trang chủ</a>
+                <br><br>
+            </div>
+        </form>
+        <a href="#" id="capture-button"><button style="width: 20px;height: 30px;"><i class="fa-solid fa-camera-retro" style="color: #16356a;"></i></button></a>
     </div>
+
+    <script>
+        document.getElementById('edit-btn').addEventListener('click', function() {
+            document.querySelectorAll('.info input').forEach(input => input.removeAttribute('readonly'));
+            document.getElementById('edit-btn').style.display = 'none';
+            document.getElementById('save-btn').style.display = 'block';
+        });
+    </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const captureButton = document.getElementById('capture-button');
+
+        captureButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            captureImages();
+        });
+
+        function captureImages() {
+            fetch("{% url 'cappicture' student_id name %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    alert('Images captured and uploaded successfully!');
+                } else {
+                    alert('Failed to capture images.');
+                }
+            })
+            .catch(error => {
+                console.error('Error capturing images:', error);
+            });
+        }
+    });
+</script>
 </body>
 </html>

@@ -10,7 +10,7 @@ from authentication.capPictureController import capture_images
 from .tokens import generate_token
 import subprocess
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import cv2
 import os
 from sklearn.model_selection import train_test_split
@@ -37,8 +37,6 @@ def classroom(request):
         return redirect('signin')
     return render(request, "class/classroom_detail.html")
 
-def regisImg(request):
-    return render(request, "admin/registerImage.html")
 
 
 def dashboard(request):
@@ -54,24 +52,6 @@ def dashboard(request):
 
 def userthem(request):
     return render(request, "admin/nguoidung.php")
-
-
-
-def cappicture(request, student_id, name):
-    if request.method == 'GET':
-        return render(request, 'admin/capture_image.html', {'student_id': student_id, 'name': name})
-    elif request.method == 'POST':
-        capture_images(student_id, name)
-        # Lấy thông tin sinh viên từ cơ sở dữ liệu
-        student = TblStudents.objects.get(student_id=student_id)
-        # Lấy classroom_id từ thông tin sinh viên
-        classroom_id = student.classroom.class_id
-        # # Thêm thông báo đăng ký thành công
-        # messages.success(request, 'Đăng ký ảnh thành công!')
-        # Chuyển hướng đến trang classroom_detail với classroom_id
-        return redirect(f'/classroom/{classroom_id}/')
-
-
 
 
 def signin(request):
