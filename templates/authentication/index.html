@@ -152,11 +152,9 @@
          <ul>
                 {% if user.is_authenticated %}   
                 <li>{{fname}}</li>
-                <li><button type="submit"><a href="/signout">Đăng xuất</a></button></li>
                 <li><button type="submit"><a href="/dashboard">Trang chủ</a></button></li>
                 {% elif request.session.student_id %}
                 <!-- <li>{{fname}}</li> -->
-                <li><button type="submit"><a href="/signout">Đăng xuất</a></button></li>
                 <li><button type="submit"><a href="/profile">Trang cá nhân</a></button></li>
                 {% else %}
                 <li><button type="submit"><a href="/signin">Đăng nhập</a></button></li>
@@ -166,11 +164,11 @@
 
     <div class="container">
         <div class="sidebar-menu">
-            <p><a href=""><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-house"></i>Trang chủ</a></p>
+            <p><a href="/"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-house"></i>Trang chủ</a></p>
             <p><a href=""><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-table"></i>Xem lớp</a></p>
             <p><a href=""><i style="margin-right: 12px; color: #fff;" class="fa-regular fa-calendar-days"></i>Điểm danh</a></p>
-            <p><a href=""><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-user"></i>Profile</a></p>
-            <p><a href="/signout"><i style="margin-right: 12px; color: #fff; margin-top: 580px;" class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></p>
+            <p><a href="/profile"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-user"></i>Profile</a></p>
+            <p><a href="/signout"><i style="margin-right: 12px; color: #fff; margin-top: 330px;" class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></p>
         </div>
         <div class="content">
 

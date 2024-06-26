@@ -72,7 +72,7 @@ a {
 .container {
     display: flex;
     background-color: #223771;
-
+    height: 650px;
 }
 
 .sidebar-menu {
@@ -102,11 +102,13 @@ a {
 
 .content{
     flex-basis: 87%;
-    height: 890px;
+    height: 585px;
     background-image: url("../images/content.png");
-    background-size: cover; /* Ensures the image covers the entire content area */
+    background-size: 100%; /* Ensures the image covers the entire content area */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-position: left center; 
-    border-radius: 70px;
+    border-radius: 40px;
     background-color: #223771;
+    margin-top: 10px;
+    margin-right: 10px;
 }
