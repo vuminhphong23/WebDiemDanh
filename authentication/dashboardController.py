@@ -8,6 +8,7 @@ from django.db.models import Count
 from .forms import TblStudentsForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 def classroom_student_list(request, class_id):
     classroom = get_object_or_404(Classroom, class_id=class_id)
@@ -56,8 +57,10 @@ def data(request):
     }
     return JsonResponse(data)
 
+@login_required
 def classroom_list(request):
-    classrooms = Classroom.objects.all()
+    user = request.user
+    classrooms = Classroom.objects.filter(teacher=user)
     return render(request, 'class/classroom_list.html', {'classrooms': classrooms})
 
 def classroom_list_attendance(request):
