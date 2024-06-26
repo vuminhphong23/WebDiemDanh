@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+
+from authentication.capPictureController import capture_images
 from .models import TblStudents
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
@@ -48,3 +50,15 @@ def view(request):
         "date_birth": student.date_birth.strftime('%Y-%m-%d') if student.date_birth else '',
     }
     return render(request, "student/profile.html", context)
+
+
+
+
+def cappicture(request, student_id, name):
+    if request.method == 'POST':
+        try:
+            capture_images(student_id, name)
+            return JsonResponse({'status': 'success', 'message': 'Images captured and uploaded successfully!'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})

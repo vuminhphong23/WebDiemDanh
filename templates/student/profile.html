@@ -109,8 +109,7 @@
                 <br><br>
             </div>
         </form>
-        <a href="{% url 'cappicture' student_id name %}"><button style="width: 20px;height: 30px;"><i class="fa-solid fa-camera-retro" style="color: #16356a;"></i></button></a>
-
+        <a href="#" id="capture-button"><button style="width: 20px;height: 30px;"><i class="fa-solid fa-camera-retro" style="color: #16356a;"></i></button></a>
     </div>
 
     <script>
@@ -120,5 +119,36 @@
             document.getElementById('save-btn').style.display = 'block';
         });
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const captureButton = document.getElementById('capture-button');
+
+        captureButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            captureImages();
+        });
+
+        function captureImages() {
+            fetch("{% url 'cappicture' student_id name %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    alert('Images captured and uploaded successfully!');
+                } else {
+                    alert('Failed to capture images.');
+                }
+            })
+            .catch(error => {
+                console.error('Error capturing images:', error);
+            });
+        }
+    });
+</script>
 </body>
 </html>
