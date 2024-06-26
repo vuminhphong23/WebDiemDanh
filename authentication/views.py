@@ -67,7 +67,7 @@ def signin(request):
                 login(request, user)
                 fname = user.first_name
                 messages.success(request, "Logged In Successfully as Teacher!")
-                return render(request, "authentication/index.html",{"fname":fname})
+                return redirect('dashboard')
             else:
                 messages.error(request, "Invalid role for this user!")
                 return redirect('signin')
