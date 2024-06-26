@@ -62,9 +62,4 @@ class AttendanceAdmin(admin.ModelAdmin):
     raw_id_fields = ('session', 'student')
     fields = ('session', 'student', 'datetime', 'attended')
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'student':
-            session_id = request.GET.get('session')
-            if session_id:
-                kwargs['queryset'] = db_field.related_model.objects.filter(classrooms__attendance_sessions__id=session_id).distinct()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
