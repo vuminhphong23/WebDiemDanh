@@ -33,9 +33,10 @@ class TblStudentsAdmin(admin.ModelAdmin):
 
 @admin.register(Classroom)
 class ClassroomAdmin(admin.ModelAdmin):
-    list_display = ('class_id', 'class_name','teacher_name', 'subject','display_students')
-    search_fields = ('class_name', 'teacher_name','subject')
+    list_display = ('class_id', 'class_name', 'teacher', 'subject', 'display_students')
+    search_fields = ('class_name', 'teacher__username', 'subject')
     inlines = [TblStudentsInline]
+    list_filter = ('teacher',)
 
     def display_students(self, obj):
         return ", ".join([student.name for student in obj.students.all()])
