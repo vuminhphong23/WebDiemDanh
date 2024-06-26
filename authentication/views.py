@@ -91,7 +91,7 @@ def signin(request):
 def signout(request):
     logout(request)
     messages.success(request, "Logged Out Successfully!!")
-    return redirect('home')
+    return redirect('signin')
 
 import pandas as pd
 from django.http import HttpResponse
