@@ -1,11 +1,12 @@
 from datetime import datetime
+from django.contrib.auth.models import User
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 
 class Classroom(models.Model):
     class_id = models.AutoField(primary_key=True)
     class_name = models.CharField(max_length=100)
-    teacher_name = models.CharField(max_length=100)
+    teacher = models.ForeignKey(User, limit_choices_to={'is_superuser': False}, on_delete=models.CASCADE)  # Liên kết tới bảng User
     subject = models.CharField(max_length=100)
 
     def __str__(self):
