@@ -26,15 +26,27 @@ import base64
 import numpy as np
 import firebase_admin
 from firebase_admin import credentials, storage
+from django.contrib.auth.decorators import login_required
+
 
 def home(request):
-    return render(request, "authentication/index.html")
+    student_id = request.session.get('student_id')
+    student_name = request.session.get('student_name')
+    if student_id and student_name:
+        return render(request, "authentication/index.html", {"fname": student_name, "student_id": student_id})
+    
+    user = request.user
+    if user.is_authenticated:  
+        return redirect('dashboard')
+    else:
+        return render(request, "authentication/index.html")
+
 
 def classroom(request):
     student_id = request.session.get('student_id')
     student_name = request.session.get('student_name')
     if student_id and student_name:
-        return redirect('signin')
+        return redirect('home')
     return render(request, "class/classroom_detail.html")
 
 
@@ -44,11 +56,16 @@ def dashboard(request):
     student_name = request.session.get('student_name')
     if student_id and student_name:
         return redirect('home')
-    # Get the total number of students
-    total_students = TblStudents.objects.count()
-    total_class = Classroom.objects.count()
-    return render(request, 'admin/index.php', {'total_students': total_students, 'total_class': total_class})
-    # return render(request, "admin/index.php")
+    
+    user = request.user
+    if user.is_authenticated:  
+        total_students = TblStudents.objects.count()
+        total_class = Classroom.objects.count()
+        total_teachers = User.objects.filter(is_superuser=False).count()
+        return render(request, 'admin/index.php', {'total_students': total_students, 'total_class': total_class, 'total_teachers': total_teachers})
+    
+    return redirect('home')
+    
 
 def userthem(request):
     return render(request, "admin/nguoidung.php")
@@ -65,7 +82,6 @@ def signin(request):
         if user is not None:
             if role == 'teacher':
                 login(request, user)
-                fname = user.first_name
                 messages.success(request, "Logged In Successfully as Teacher!")
                 return redirect('dashboard')
             else:
@@ -78,7 +94,7 @@ def signin(request):
                     request.session['student_id'] = student.student_id
                     request.session['student_name'] = student.name
                     messages.success(request, "Logged In Successfully as Student!")
-                    return render(request, "authentication/index.html", {"fname": student.name, "student_id": student.student_id})
+                    return redirect('home')
                 else:
                     messages.error(request, "Bad Credentials for Student!")
             except TblStudents.DoesNotExist:
@@ -91,7 +107,7 @@ def signin(request):
 def signout(request):
     logout(request)
     messages.success(request, "Logged Out Successfully!!")
-    return redirect('home')
+    return redirect('signin')
 
 import pandas as pd
 from django.http import HttpResponse
