@@ -165,5 +165,5 @@ from firebase_admin import credentials, storage
 
 cred = credentials.Certificate('authentication.json')
 firebase_admin.initialize_app(cred, {
-    'storageBucket': 'authentication-28e57.appspot.com'
+    'storageBucket': 'face-53012.appspot.com'
 })

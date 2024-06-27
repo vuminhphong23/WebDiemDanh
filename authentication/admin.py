@@ -37,6 +37,7 @@ class ClassroomAdmin(admin.ModelAdmin):
     search_fields = ('class_name', 'teacher__username', 'subject')
     inlines = [TblStudentsInline]
     list_filter = ('teacher',)
+    change_list_template = "train/button_form.html"
 
     def display_students(self, obj):
         return ", ".join([student.name for student in obj.students.all()])
