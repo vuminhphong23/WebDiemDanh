@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, JsonResponse
 
 from authentication.capPictureController import capture_images
@@ -57,7 +57,14 @@ def view(request):
 def cappicture(request, student_id, name):
     if request.method == 'POST':
         try:
+            # Capture images (assuming you have a function named capture_images)
             capture_images(student_id, name)
+            
+            # Update the student's iCap status
+            student = get_object_or_404(TblStudents, student_id=student_id)
+            student.iCap = True
+            student.save()
+            
             return JsonResponse({'status': 'success', 'message': 'Images captured and uploaded successfully!'})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)})

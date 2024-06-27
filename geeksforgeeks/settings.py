@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 from . info import *
 
@@ -167,3 +168,12 @@ cred = credentials.Certificate('authentication.json')
 firebase_admin.initialize_app(cred, {
     'storageBucket': 'face-53012.appspot.com'
 })
+
+
+# Suppress TensorFlow informational and warning messages
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
+# Import TensorFlow and set logging level
+import tensorflow as tf
+tf.get_logger().setLevel('ERROR')
