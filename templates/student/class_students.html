@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'assets/css/home.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Poppins:wght@300&family=Roboto:ital,wght@0,300;0,400;0,500;1,100;1,300&family=Satisfy&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/7b9d8c4ddc.js" crossorigin="anonymous"></script>
+    <title>Trang chủ</title>
+    <style>
+        .container {
+            display: flex;
+        }
+
+        .content-student {
+            width: 80%;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #fff; /* Màu chữ chính */
+        }
+
+        .content-student h2 {
+            color: #009879; /* Màu tiêu đề */
+            font-size: 24px; /* Kích thước tiêu đề */
+            margin-bottom: 10px; /* Khoảng cách dưới của tiêu đề */
+        }
+
+        .content-student p {
+            margin-bottom: 8px; /* Khoảng cách dưới của đoạn văn bản */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        table thead tr {
+            background-color: #009879;
+            color: white;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+
+        .details-button {
+            background-color: #009879;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <input type="text" placeholder="Tìm kiếm thông tin">
+        <ul>
+            {% if user.is_authenticated %}   
+                <li>{{fname}}</li>
+                <li><button type="submit"><a href="/dashboard">Trang chủ</a></button></li>
+            {% elif request.session.student_id %}
+                <li><button type="submit"><a href="/profile">Trang cá nhân</a></button></li>
+            {% else %}
+                <li><button type="submit"><a href="/signin">Đăng nhập</a></button></li>
+            {% endif %}
+        </ul>   
+    </div>
+
+    <div class="container">
+        <div class="sidebar-menu">
+            <p><a href="/"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-house"></i>Trang chủ</a></p>
+            <p><a href="/class_students"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-table"></i>Xem lớp</a></p>
+            <p><a href="/attendance_students"><i style="margin-right: 12px; color: #fff;" class="fa-regular fa-calendar-days"></i>Điểm danh</a></p>
+            <p><a href="/profile"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-user"></i>Profile</a></p>
+            <p><a href="/signout"><i style="margin-right: 12px; color: #fff; margin-top: 330px;" class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></p>
+        </div>
+        <div class="content-student">
+            <h2>Danh sách lớp học</h2>
+            {% if classrooms %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên lớp</th>
+                            <th>Giáo viên</th>
+                            <th>Môn học</th>
+                            <th>Chi tiết</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for classroom in classrooms %}
+                            <tr>
+                                <td>{{ classroom.class_id }}</td>
+                                <td>{{ classroom.class_name }}</td>
+                                <td>{{ classroom.teacher.username }}</td>
+                                <td>{{ classroom.subject }}</td>
+                                <td><a href="{% url 'class_detail' classroom.class_id %}" class="details-button">Xem chi tiết</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No classrooms available.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
