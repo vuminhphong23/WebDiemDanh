@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from django.contrib.auth.models import User
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
@@ -42,17 +42,23 @@ class AttendanceSession(models.Model):
         return f"{self.classroom.class_name} - {self.date} ({self.start_time} - {self.end_time})"
 
 class Attendance(models.Model):
-    session = models.ForeignKey(AttendanceSession, on_delete=models.CASCADE, related_name='attendances',null=True)
+    session = models.ForeignKey(AttendanceSession, on_delete=models.CASCADE, related_name='attendances', null=True)
     student = models.ForeignKey(TblStudents, on_delete=models.CASCADE, related_name='attendances')
     attended = models.BooleanField(default=False)
-    datetime = models.DateTimeField(null=True, blank=True)
+    date = models.DateField(null=True, blank=True)  # Thêm cột date
+    time = models.TimeField(null=True, blank=True)  # Thêm cột time
 
     def __str__(self):
         return f"{self.student.name} - {self.session.classroom.class_name} - {self.session.date}"
 
     def save(self, *args, **kwargs):
-        if not self.datetime:
-            self.datetime = datetime .now()
-        if not (self.session.start_time <= self.datetime.time() <= self.session.end_time):
-            self.attended = False
+        if not self.date or not self.time:
+            now = timezone.now()
+            self.date = self.date or now.date()
+            self.time = self.time or now.time()
+        if self.session:
+            if not (self.date == self.session.date and self.session.start_time <= self.time <= self.session.end_time):
+                self.attended = False
+            else:
+                self.attended = True
         super().save(*args, **kwargs)

@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Dashboard</title>
+  <title>Attendance Details</title>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -20,7 +19,7 @@
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
   <style>
-    #up {
+    #filter-btn, #clear-btn {
       padding: 5px 10px;
       background-color: #009879;
       color: white;
@@ -33,34 +32,35 @@
       transition: background-color 0.3s ease;
     }
 
-    #up:hover {
+    #filter-btn:hover, #clear-btn:hover {
       background-color: #06b693;
     }
 
-    #up:focus {
+    #filter-btn:focus, #clear-btn:focus {
       outline: none;
+    }
+
+    #clear-btn {
+      margin-left: 10px;
+      background-color: #f44336;
+    }
+
+    #clear-btn:hover {
+      background-color: #ff6659;
     }
   </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-  <!-- Sidebar -->
+  <!-- Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
       <img src="{% static 'assets/images/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Teacher</span>
     </a>
-
     <!-- Sidebar -->
     <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="info">
-          <a href="#" class="d-block">{{ request.user.username }}</a>
-        </div>
-      </div>
-
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -94,59 +94,54 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-  <!-- /.Sidebar -->
 
-  <!-- Content -->
+  <!-- Content Wrapper -->
   <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
-      <div class="content-header">
-        <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1 class="m-0">Điểm danh</h1>
-            </div>
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Lịch điểm danh cho {{ classroom.class_name }}</h1>
           </div>
         </div>
       </div>
-      <!-- /.content-header -->
+    </div>
 
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="container">
-            <table class="content-table">
-                <thead>
-                    <tr>
-                        <th>Mã lớp học</th>
-                        <th>Tên lớp học</th>
-                        <th>Tên giáo viên</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for classroom in classrooms %}
-                    <tr>
-                        <td>{{ classroom.class_id }}</td>
-                        <td>{{ classroom.class_name }}</td>
-                        <td>{{ classroom.teacher.username }}</td>
-                        <td>
-                            <a href="{% url 'classroom_attendance_detail' classroom.class_id %}"><button id="up">Xem chi tiêt</button></a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-          </div>
+          <form method="get" action="">
+            <label for="date">Filter by Date:</label>
+            <input type="date" id="date" name="date" value="{{ date_filter }}">
+            <button type="submit" id="filter-btn">Filter</button>
+            <a href="{% url 'classroom_attendance_detail' classroom.class_id %}"><button type="button" id="clear-btn">Clear Filter</button></a>
+          </form>
+          <table class="content-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for session in sessions %}
+              <tr>
+                <td>{{ session.date }}</td>
+                <td>{{ session.start_time }}</td>
+                <td>{{ session.end_time }}</td>
+                <td><a href="{% url 'session_attendance_detail' session.session_id %}">View Details</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   </div>
-
-  <!-- Scripts -->
-  <script src="{% static 'assets/js/jquery.min.js' %}"></script>
-  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'assets/js/adminlte.min.js' %}"></script>
-  <script src="{% static 'assets/js/demo.js' %}"></script>
-  <script src="{% static 'assets/js/pages/dashboard.js' %}"></script>
+</div>
 </body>
 </html>

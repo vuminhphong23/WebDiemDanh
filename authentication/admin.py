@@ -59,10 +59,10 @@ class AttendanceSessionAdmin(admin.ModelAdmin):
 
 @admin.register(Attendance)
 class AttendanceAdmin(admin.ModelAdmin):
-    list_display = ('session', 'student', 'attended', 'datetime')
+    list_display = ('session', 'student', 'attended', 'date', 'time')  
     search_fields = ('session__classroom__class_name', 'student__name', 'session__date')
     list_filter = ('session__classroom', 'session__date', 'attended')
     raw_id_fields = ('session', 'student')
-    fields = ('session', 'student', 'datetime', 'attended')
+    fields = ('session', 'student', 'date', 'time', 'attended') 
 
 

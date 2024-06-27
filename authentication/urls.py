@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 
-from authentication import profileController
+from authentication import attendanceStudentController, classStudentController, profileController
 from . import views
 from . import dashboardController
 from . import camera
@@ -10,30 +10,27 @@ from . import train
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('dashboard', views.dashboard, name='dashboard'),
-    path('nguoidung', views.userthem, name='nguoidung'),
     path('signin', views.signin, name='signin'),
     path('signout', views.signout, name='signout'),
-    path('delete_student/<int:student_id>/', dashboardController.delete_student, name='delete_student'),
-    path('diemdanh', camera.diemdanh, name='diemdanh'),
-    path('classroom_list', dashboardController.classroom_list, name='classroom_list'),
-    path('add_student/', dashboardController.add_student, name='add_student'),
-    path('classroom/<int:class_id>/', dashboardController.classroom_detail, name='classroom_detail'),
-    path('classroom/<int:class_id>/add_student/', dashboardController.add_student, name='add_student'),
-    path('student/<int:student_id>/edit/', dashboardController.edit_student, name='edit_student'), 
+    
     path('embeddings', train.embeddings, name='embeddings'), 
-    path('classroom', views.classroom, name='classroom'),
-    path('classroom/<int:class_id>/', dashboardController.classroom_student_list, name='classroom_student_list'),
-    path('classroom/<int:class_id>/add_student/', dashboardController.add_student, name='add_student'),
-    path('classroom/<int:classroom_id>/', dashboardController.classroom_student_list, name='classroom_list_attendance'),
+
+    path('dashboard', dashboardController.dashboard, name='dashboard'),
+    path('classroom/<int:classroom_id>/', dashboardController.classroom_detail, name='classroom_detail'),
+    path('classroom_list', dashboardController.classroom_list, name='classroom_list'),
+
     path('classroom_list_attendance', dashboardController.classroom_list_attendance, name='classroom_list_attendance'),
-    path('student_list', dashboardController.student_list, name='student_list'),
-    path('export-to-excel/', views.export_to_excel, name='export_to_excel'),
+    path('classroom/<int:class_id>/attendance/', dashboardController.classroom_attendance_detail, name='classroom_attendance_detail'),
+    path('session/<int:session_id>/attendance/', dashboardController.session_attendance_detail, name='session_attendance_detail'),
+    path('diemdanh/<int:classroom_id>/<int:session_id>/', camera.diemdanh, name='diemdanh'),
+    path('export_attendance/<int:session_id>/', dashboardController.export_to_excel, name='export_to_excel'),
     
     path('profile', profileController.view, name='profile'),
     path('cappicture/<str:student_id>/<str:name>/', profileController.cappicture, name='cappicture'),
-
-   
-
+    path('class_students', classStudentController.view, name='class_students'),
+    path('class_detail/<int:class_id>/', classStudentController.viewdetail, name='class_detail'),
+    path('attendance_students', attendanceStudentController.view, name='attendance_students'),
+    path('attendance_detail/<int:class_id>/attendance/', attendanceStudentController.viewdetail, name='attendance_detail'),
+    path('sessions/<int:session_id>/attendance/', attendanceStudentController.session_attendance, name='session_attendance'),
 ]
 

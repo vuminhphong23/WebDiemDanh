@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bảng Điều Khiển Sinh Viên</title>
+    <title>Thông tin sinh viên</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
@@ -120,35 +120,36 @@
         });
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const captureButton = document.getElementById('capture-button');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const captureButton = document.getElementById('capture-button');
 
-        captureButton.addEventListener('click', function(event) {
-            event.preventDefault();
-            captureImages();
-        });
-
-        function captureImages() {
-            fetch("{% url 'cappicture' student_id name %}", {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                },
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.status === 'success') {
-                    alert('Images captured and uploaded successfully!');
-                } else {
-                    alert('Failed to capture images.');
-                }
-            })
-            .catch(error => {
-                console.error('Error capturing images:', error);
+            captureButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                captureImages();
             });
-        }
-    });
-</script>
+
+            function captureImages() {
+                fetch("{% url 'cappicture' student_id name %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success') {
+                        alert('Images captured and uploaded successfully!');
+                        location.reload();  // Reload the page
+                    } else {
+                        alert('Failed to capture images.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error capturing images:', error);
+                });
+            }
+        });
+    </script>
 </body>
 </html>
