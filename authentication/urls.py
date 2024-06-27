@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 
-from authentication import profileController
+from authentication import attendanceStudentController, classStudentController, profileController
 from . import views
 from . import dashboardController
 from . import camera
@@ -28,8 +28,10 @@ urlpatterns = [
     
     path('profile', profileController.view, name='profile'),
     path('cappicture/<str:student_id>/<str:name>/', profileController.cappicture, name='cappicture'),
-
-   
-
+    path('class_students', classStudentController.view, name='class_students'),
+    path('class_detail/<int:class_id>/', classStudentController.viewdetail, name='class_detail'),
+    path('attendance_students', attendanceStudentController.view, name='attendance_students'),
+    path('attendance_detail/<int:class_id>/attendance/', attendanceStudentController.viewdetail, name='attendance_detail'),
+    path('sessions/<int:session_id>/attendance/', attendanceStudentController.session_attendance, name='session_attendance'),
 ]
 
