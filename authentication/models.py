@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from django.contrib.auth.models import User
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
@@ -53,9 +53,12 @@ class Attendance(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.date or not self.time:
-            self.date = self.datetime.date() if self.datetime else None
-            self.time = self.datetime.time() if self.datetime else None
+            now = timezone.now()
+            self.date = self.date or now.date()
+            self.time = self.time or now.time()
         if self.session:
-            if not (self.session.start_time <= self.time <= self.session.end_time):
+            if not (self.date == self.session.date and self.session.start_time <= self.time <= self.session.end_time):
                 self.attended = False
+            else:
+                self.attended = True
         super().save(*args, **kwargs)

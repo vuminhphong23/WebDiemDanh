@@ -98,6 +98,12 @@ def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
                     today = now.date()
                     current_time = now.time()
 
+                    # Check if the current date matches the session date
+                    if today != session.date:
+                        attendance_message = f"{student.student_id} - {student.name} is not on the session date"
+                        print(attendance_message)
+                        continue
+                    
                     # Check if the current time is within the session time range
                     if not (session.start_time <= current_time <= session.end_time):
                         attendance_message = f"{student.student_id} - {student.name} is outside session time range"
