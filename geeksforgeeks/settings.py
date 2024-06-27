@@ -96,7 +96,7 @@ DATABASES = {
         # 'NAME': 'djangonew',
         'NAME': 'django',
         'USER': 'root',
-        'PASSWORD': 'ducanh12',
+        'PASSWORD': '',
         'HOST': 'localhost',
         # "PORT": "10848",
     }
@@ -166,7 +166,7 @@ from firebase_admin import credentials, storage
 
 cred = credentials.Certificate('authentication.json')
 firebase_admin.initialize_app(cred, {
-    'storageBucket': 'face-53012.appspot.com'
+    'storageBucket': 'authentication-28e57.appspot.com'
 })
 
 
