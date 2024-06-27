@@ -98,33 +98,73 @@
             <p><a href="/signout"><i style="margin-right: 12px; color: #fff; margin-top: 330px;" class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></p>
         </div>
         <div class="content-student">
-            <h2>Danh sách lớp học</h2>
-            {% if classrooms %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tên lớp</th>
-                            <th>Giáo viên</th>
-                            <th>Môn học</th>
-                            <th>Chi tiết</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for classroom in classrooms %}
-                            <tr>
-                                <td>{{ classroom.class_id }}</td>
-                                <td>{{ classroom.class_name }}</td>
-                                <td>{{ classroom.teacher.username }}</td>
-                                <td>{{ classroom.subject }}</td>
-                                <td><a href="{% url 'class_detail' classroom.class_id %}" class="details-button">Xem chi tiết</a></td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>No classrooms available.</p>
-            {% endif %}
+            <h1>Điểm danh</h1>
+            <label for="filterDate">Tìm theo ngày:</label>
+            <input type="date" id="filterDate">
+            <button id="filterButton">Tìm kiếm</button>
+            <table class="content-table" border="1">
+                <thead>
+                    <tr>
+                        <th>Mã sinh viên</th>
+                        <th>Họ và tên</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Ngày sinh</th>
+                        <th>Ngày điểm danh</th>
+                        <th>Thời gian</th>
+                        <th>Điểm danh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.student_id }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.phone }}</td>
+                        <td>{{ student.date_birth|date:"d/m/Y" }}</td>
+                        <td>
+                            {% for att in attendance %}
+                            {% if att.student == student %}
+                            {{ att.datetime|date:"d/m/Y" }}<br>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for att in attendance %}
+                            {% if att.student == student %}
+                            {{ att.datetime|time:"H:i:s" }}<br>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for att in attendance %}
+                            {% if att.student == student %}
+                            {% if att.attended %}Có mặt{% else %}Đã điểm danh{% endif %}<br>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <script>
+                document.getElementById("filterButton").addEventListener("click", function () {
+                    var filterDate = new Date(document.getElementById("filterDate").value); // Chuyển đổi ngày từ input thành đối tượng Date
+                    var tableRows = document.querySelectorAll(".content-table tbody tr");
+                    for (var i = 0; i < tableRows.length; i++) {
+                        var rowDate = tableRows[i].querySelectorAll("td")[5].textContent.trim(); // Sử dụng textContent thay vì innerText
+                        // Chuyển đổi định dạng của ngày trong bảng
+                        var formattedRowDate = new Date(rowDate);
+                        if (formattedRowDate.toDateString() === filterDate.toDateString()) {
+                            tableRows[i].style.display = ""; // Hiển thị hàng nếu ngày khớp
+                        } else {
+                            tableRows[i].style.display = "none"; // Ẩn hàng nếu ngày không khớp
+                        }
+                    }
+                    });
+        
+            </script>
         </div>
     </div>
 </body>

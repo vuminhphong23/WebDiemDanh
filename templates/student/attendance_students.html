@@ -107,7 +107,7 @@
                             <th>Tên lớp</th>
                             <th>Giáo viên</th>
                             <th>Môn học</th>
-                            <th>Chi tiết</th>
+                            <th>Điểm danh</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -117,7 +117,7 @@
                                 <td>{{ classroom.class_name }}</td>
                                 <td>{{ classroom.teacher.username }}</td>
                                 <td>{{ classroom.subject }}</td>
-                                <td><a href="{% url 'class_detail' classroom.class_id %}" class="details-button">Xem chi tiết</a></td>
+                                <td><a href="{% url 'attendance_detail' classroom.class_id %}" class="details-button">Chi tiết</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
