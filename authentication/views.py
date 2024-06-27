@@ -43,7 +43,7 @@ def signin(request):
                 if student.check_password(pass1):
                     request.session['student_id'] = student.student_id
                     request.session['student_name'] = student.name
-                    messages.success(request, "Logged In Successfully as Student!")
+                    # messages.success(request, "Logged In Successfully as Student!")
                     return redirect('home')
                 else:
                     messages.error(request, "Bad Credentials for Student!")

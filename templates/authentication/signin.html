@@ -265,6 +265,17 @@
             </div>
             <form action="/signin" method="POST" id="loginForm" class="login-form" autocomplete="off">
                {% csrf_token %}
+               {% if messages %}
+                {% for message in messages %}
+                    <div class="success-message" role="alert">
+                      <strong>{{ message }}</strong>
+                      <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button> -->
+                    </div>
+                    
+                  {% endfor %}
+                {% endif %}
                 <div class="login-content">
                     <div class="form-item">
                         <label for="email">Enter Email</label>
@@ -278,26 +289,23 @@
                         <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Enter Your Password" Required>
                     </div>
                     <div class="form-item">
-                      <label for="last_name">Chức vụ</label>
-                      <select class="form-control" id="is_superuser" name="is_superuser" required>
+                      <label for="password">Position<label>
+                      <!-- <select class="form-control" id="is_superuser" name="is_superuser" required> -->
+                      <select class="form-select form-select-sm mb-3" id="is_superuser" name="is_superuser" required>
                         <option value="teacher">Giáo viên</option>
                           <option value="student">Sinh viên</option>
                       </select>
                     </div>
-                    <div class="form-item">
-                        <div class="checkbox">
-                            <input type="checkbox" name="" id="rememberMeCheckbox" checked>
-                            <label for="rememberMeCheckbox" class="checkboxlabel">Remember Me</label>
-                        </div>
-                    </div>
-                    <div class="remember-forgot">
-                        <a href="#">Forgot password?</a>
-                    </div>      
+                          
     
                     <button type="submit" id="loginButton">LogIn</button>
                 </div>
                
             </form>
+        </div>
+        <div class="login-right">
+          <!-- <link rel="stylesheet" href="{% static 'assets/css/images/content.png' %}">  -->
+          <img src="{%static 'assets/images/login.jfif' %}">
         </div>
     </div>
 
