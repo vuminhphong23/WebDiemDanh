@@ -19,7 +19,7 @@ def viewdetail(request, classroom_id):
     latest_attendance_subquery = Attendance.objects.filter(
         student=OuterRef('pk'),
         session__classroom=classroom  # Filter by classroom
-    ).order_by('-datetime').values('datetime')[:1]
+    ).order_by('-date').values('date')[:1]
 
     students_with_latest_attendance = students.annotate(
         latest_attendance_datetime=Subquery(latest_attendance_subquery)
@@ -32,7 +32,7 @@ def viewdetail(request, classroom_id):
             latest_attendance = Attendance.objects.filter(
                 student=student,
                 session__classroom=classroom,
-                datetime=student.latest_attendance_datetime
+                date=student.latest_attendance_datetime
             ).first()
             if latest_attendance:
                 latest_attendance_list.append(latest_attendance)

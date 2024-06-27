@@ -126,14 +126,14 @@
                         <td>
                             {% for att in attendance %}
                             {% if att.student == student %}
-                            {{ att.datetime|date:"d/m/Y" }}<br>
+                            {{ att.date|date:"d/m/Y" }}<br>
                             {% endif %}
                             {% endfor %}
                         </td>
                         <td>
                             {% for att in attendance %}
                             {% if att.student == student %}
-                            {{ att.datetime|time:"H:i:s" }}<br>
+                            {{ att.date }}<br>
                             {% endif %}
                             {% endfor %}
                         </td>
