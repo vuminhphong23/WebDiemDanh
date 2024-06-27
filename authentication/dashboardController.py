@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+import pandas as pd
 from sympy import Max
 from .models import Attendance, TblStudents, Classroom, AttendanceSession
 from .models import TblStudents
