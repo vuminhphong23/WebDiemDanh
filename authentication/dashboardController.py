@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from sympy import Max
-from .models import Attendance, TblStudents, Classroom
+from .models import Attendance, TblStudents, Classroom, AttendanceSession
 from django.http import JsonResponse
 from .models import TblStudents
 from django.db.models import Count
@@ -9,6 +9,8 @@ from .forms import TblStudentsForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.utils.dateparse import parse_date
+
 
 def classroom_student_list(request, class_id):
     classroom = get_object_or_404(Classroom, class_id=class_id)
@@ -64,7 +66,8 @@ def classroom_list(request):
     return render(request, 'class/classroom_list.html', {'classrooms': classrooms})
 
 def classroom_list_attendance(request):
-    classrooms = Classroom.objects.all()
+    user = request.user
+    classrooms = Classroom.objects.filter(teacher=user)
     return render(request, 'attendance/classroom_list.html', {'classrooms': classrooms})
 
 def classroom_detail(request, class_id):
@@ -122,34 +125,39 @@ def classroom_student_list(request, classroom_id):
         'total_students': total_students
     })
 
-from django.shortcuts import render
-from django.db.models import OuterRef, Subquery, Max
 
-def student_list(request):
-    # Lấy tất cả sinh viên
-    students = TblStudents.objects.all()
 
-    # Tạo subquery để lấy datetime mới nhất cho mỗi sinh viên
-    latest_attendance_subquery = Attendance.objects.filter(
-        student=OuterRef('pk')
-    ).order_by('-datetime').values('datetime')[:1]
+def classroom_attendance_detail(request, class_id):
+    classroom = get_object_or_404(Classroom, pk=class_id)
+    date_filter = request.GET.get('date')
+    if date_filter:
+        sessions = classroom.attendance_sessions.filter(date=parse_date(date_filter))
+    else:
+        sessions = classroom.attendance_sessions.all()
+    return render(request, 'attendance/attendance_detail.html', {
+        'classroom': classroom,
+        'sessions': sessions,
+        'date_filter': date_filter,
+    })
 
-    # Annotate mỗi sinh viên với datetime điểm danh mới nhất
-    students_with_latest_attendance = students.annotate(
-        latest_attendance_datetime=Subquery(latest_attendance_subquery)
-    )
+def session_attendance_detail(request, session_id):
+    session = get_object_or_404(AttendanceSession, pk=session_id)
+    classroom = session.classroom
+    students = classroom.students.all()
 
-    # Tạo danh sách để lưu các bản ghi điểm danh mới nhất
-    latest_attendance_list = []
+    # Create a dictionary to store attendance records keyed by student id
+    attendance_dict = {attendance.student_id: attendance for attendance in session.attendances.all()}
 
-    # Lấy bản ghi điểm danh mới nhất cho mỗi sinh viên
-    for student in students_with_latest_attendance:
-        if student.latest_attendance_datetime:
-            latest_attendance = Attendance.objects.filter(
-                student=student,
-                datetime=student.latest_attendance_datetime
-            ).first()
-            if latest_attendance:
-                latest_attendance_list.append(latest_attendance)
-
-    return render(request, 'attendance/attendance.html', {'students': students, 'attendance': latest_attendance_list})
+    attendance_details = []
+    for student in students:
+        attendance = attendance_dict.get(student.student_id)
+        if attendance:
+            attendance_details.append(attendance)
+        else:
+            # If the student has no attendance record, create a dummy one with attended=False
+            attendance_details.append(Attendance(student=student, session=session, attended=False))
+    
+    return render(request, 'attendance/session_detail.html', {
+        'session': session,
+        'attendance_details': attendance_details
+    })
