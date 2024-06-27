@@ -54,14 +54,14 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="info">
-            <a href="#" class="d-block">{{ request.user.username }}</a>
+            <a href="#" class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
           </div>
         </div>
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item menu-open">
+          <li class="nav-item ">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
@@ -69,7 +69,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item ">
             <a href="/classroom_list" class="nav-link ">
               <i class="nav-icon fas fa-user"></i>
               <p>
@@ -77,7 +77,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item ">
             <a href="/classroom_list_attendance" class="nav-link ">
               <i class="nav-icon fas fa-book"></i>
               <p>
@@ -88,7 +88,7 @@
           <li class="nav-item mt-5">
               <a href="/signout" class="nav-link">
                 <i class="fas fa-sign-out-alt"></i>
-                <p>SignOut</p>
+                <p>Đăng xuất</p>
               </a>
             </li>
           
@@ -108,12 +108,7 @@
           <div class="col-sm-6">
             <h1 class="m-0">Tổng quan</h1>
           </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard</li>
-            </ol>
-          </div><!-- /.col -->
+          
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>

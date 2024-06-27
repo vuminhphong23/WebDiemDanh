@@ -115,27 +115,30 @@ def export_to_excel(request, session_id):
     for student in all_students:
         attendance = Attendance.objects.filter(session=session, student=student).first()
         if attendance:
+            attendance_status = 'Có mặt' if attendance.attended else 'Vắng'
             data.append({
-                'Student Name': student.name,
+                'MSSV': student.student_id,
+                'Họ và tên': student.name,
                 'Email': student.email,
-                'Attended': attendance.attended,
-                'Date': attendance.date,
-                'Time': attendance.time,
+                'Điểm danh': attendance_status,
+                'Ngày': attendance.date,
+                'Giờ': attendance.time,
             })
         else:
             data.append({
-                'Student Name': student.name,
+                'MSSV': student.student_id,
+                'Họ và tên': student.name,
                 'Email': student.email,
-                'Attended': False,
-                'Date': '',
-                'Time': '',
+                'Điểm danh': 'Vắng',
+                'Ngày': '',
+                'Giờ': '',
             })
 
     df = pd.DataFrame(data)
 
     # Create an HttpResponse object with Excel file content
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = f'attachment; filename=attendance_{classroom.class_name}_{session.date}.xlsx'
+    response['Content-Disposition'] = f'attachment; filename={classroom.class_name}_{session.date}_{session.start_time}_{session.end_time}.xlsx'
 
     with pd.ExcelWriter(response, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Attendance')
