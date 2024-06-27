@@ -98,23 +98,25 @@
             <p><a href="/signout"><i style="margin-right: 12px; color: #fff; margin-top: 330px;" class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></p>
         </div>
         <div class="content-student">
-            <h2 class="m-0">Lịch điểm danh cho {{ classroom.class_name }}</h2>
+            <h2 class="m-0">Danh sách điểm danh cho {{ session.classroom.class_name }} ngày {{ session.date|date:"d/m/Y" }}</h2>
             <table class="content-table">
                 <thead>
                   <tr>
-                    <th>Ngày học</th>
-                    <th>Giờ bắt đầu</th>
-                    <th>Giờ kết thúc</th>
-                    <th>Chi tiết điểm danh</th>
+                    <th>Tên sinh viên</th>
+                    <th>Email</th>
+                    <th>Điểm danh</th>
+                    <th>Ngày</th>
+                    <th>Thời gian   </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {% for session in sessions %}
+                  {% for attendance in attendance_details %}
                   <tr>
-                    <td>{{ session.date|date:"d/m/Y" }}</td>
-                    <td>{{ session.start_time }}</td>
-                    <td>{{ session.end_time }}</td>
-                    <td><a style="color: #fff;" href="{% url 'session_attendance' session.session_id %}">Xem chi tiết</a></td>
+                    <td>{{ attendance.student.name }}</td>
+                    <td>{{ attendance.student.email }}</td>
+                    <td>{{ attendance.attended }}</td>
+                    <td>{{ attendance.date|date:"d/m/Y" }}</td>
+                    <td>{{ attendance.time }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>

@@ -31,6 +31,7 @@ urlpatterns = [
     path('class_students', classStudentController.view, name='class_students'),
     path('class_detail/<int:class_id>/', classStudentController.viewdetail, name='class_detail'),
     path('attendance_students', attendanceStudentController.view, name='attendance_students'),
-    path('attendance_detail/<int:classroom_id>/', attendanceStudentController.viewdetail, name='attendance_detail'),
+    path('attendance_detail/<int:class_id>/attendance/', attendanceStudentController.viewdetail, name='attendance_detail'),
+    path('sessions/<int:session_id>/attendance/', attendanceStudentController.session_attendance, name='session_attendance'),
 ]
 
