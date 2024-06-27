@@ -106,27 +106,38 @@ def session_attendance_detail(request, session_id):
 
 
 # chưa dung
-def export_to_excel(request):
-    students = TblStudents.objects.all()
-    attendance = Attendance.objects.all()
+def export_to_excel(request, session_id):
+    session = get_object_or_404(AttendanceSession, session_id=session_id)
+    classroom = session.classroom
+    all_students = TblStudents.objects.filter(classrooms=classroom)
 
     data = []
-    for student in students:
-        student_attendance = attendance.filter(student=student)
-        for att in student_attendance:
+    for student in all_students:
+        attendance = Attendance.objects.filter(session=session, student=student).first()
+        if attendance:
             data.append({
-                'Mã sinh viên': student.student_id,
-                'Họ và tên': student.name,
+                'Student Name': student.name,
                 'Email': student.email,
-                'Số điện thoại': student.phone,
-                'Ngày sinh': student.date_birth.strftime("%d-%m-%Y"),
-                'Ngày điểm danh': att.datetime.strftime("%d-%m-%Y"),
-                'Thời gian': att.datetime.strftime("%H:%M:%S"),
-                'Điểm danh': 'Có mặt' if att.attended else 'Đã điểm danh',
+                'Attended': attendance.attended,
+                'Date': attendance.date,
+                'Time': attendance.time,
+            })
+        else:
+            data.append({
+                'Student Name': student.name,
+                'Email': student.email,
+                'Attended': False,
+                'Date': '',
+                'Time': '',
             })
 
     df = pd.DataFrame(data)
+
+    # Create an HttpResponse object with Excel file content
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=attendance.xlsx'
-    df.to_excel(response, index=False)
+    response['Content-Disposition'] = f'attachment; filename=attendance_{classroom.class_name}_{session.date}.xlsx'
+
+    with pd.ExcelWriter(response, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Attendance')
+
     return response

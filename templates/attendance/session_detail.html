@@ -112,6 +112,10 @@
         <a href="{% url 'diemdanh' classroom_id=session.classroom.class_id session_id=session.session_id %}">
             <button id="new3">Điểm danh</button>
         </a>
+
+        <a href="{% url 'export_to_excel' session_id=session.session_id %}">
+            <button id="export">Xuất file Excel</button>
+        </a>
       </div>
     </section>
   </div>
