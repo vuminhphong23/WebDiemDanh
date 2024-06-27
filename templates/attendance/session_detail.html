@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Session Attendance Details</title>
+  <title>Danh sách điểm danh</title>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -30,6 +30,11 @@
     </a>
     <!-- Sidebar -->
     <div class="sidebar">
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="info">
+              <a href="#" class="d-block">{{ request.user.username }}</a>
+            </div>
+        </div>
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -71,7 +76,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Attendance Details for {{ session.classroom.class_name }} on {{ session.date }}</h1>
+            <h1 class="m-0">Danh sách điểm danh cho {{ session.classroom.class_name }} on {{ session.date }}</h1>
           </div>
         </div>
       </div>
@@ -87,7 +92,8 @@
                 <th>Student Name</th>
                 <th>Email</th>
                 <th>Attended</th>
-                <th>DateTime</th>
+                <th>Date</th>
+                <th>Time</th>
               </tr>
             </thead>
             <tbody>
@@ -96,12 +102,16 @@
                 <td>{{ attendance.student.name }}</td>
                 <td>{{ attendance.student.email }}</td>
                 <td>{{ attendance.attended }}</td>
-                <td>{{ attendance.datetime }}</td>
+                <td>{{ attendance.date }}</td>
+                <td>{{ attendance.time }}</td>
               </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
+        <a href="{% url 'diemdanh' classroom_id=session.classroom.class_id session_id=session.session_id %}">
+            <button id="new3">Điểm danh</button>
+        </a>
       </div>
     </section>
   </div>

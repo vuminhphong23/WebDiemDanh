@@ -35,39 +35,11 @@
   {% load static %}
   <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/summernote/summernote-bs4.min.css' %}">
  
-  <!-- <link rel="stylesheet" href="">
-  <link rel="stylesheet" href="assets/css/Admin/admin/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/Admin/admin/assets/plugins/jqvmap/jqvmap.min.css">
-
-  <link rel="stylesheet" href="assets/css/Admin/admin/assets/css/adminlte.min.css">
-  <link rel="stylesheet" href="assets/css/Admin/admin/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <link rel="stylesheet" href="assets/css/Admin/admin/assets/plugins/daterangepicker/daterangepicker.css">
-  <link rel="stylesheet" href="assets/css/Admin/admin/assets/plugins/summernote/summernote-bs4.min.css"> -->
+  
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-  <!-- Navbar -->
-  <!-- <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Home</a>
-      </li>
-    </ul>
-
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <p class="nav-link">ADMIN</p>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-          <i class="fas fa-expand-arrows-alt"></i>
-        </a>
-      </li>
-    </ul>
-  </nav>   -->
+  
 
   <!-- Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -81,13 +53,10 @@
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <!-- <div class="image">
-          <img  src="../assets/img/avatar5.png" class="img-circle elevation-2" alt="User Image">
-        </div> -->
-        <!-- <div class="info">
-          <a href="#" class="d-block">ADMIN</a>
-        </div> -->
-      </div>
+          <div class="info">
+            <a href="#" class="d-block">{{ request.user.username }}</a>
+          </div>
+        </div>
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -116,30 +85,13 @@
               </p>
             </a>
           </li>
-          <!-- <li class="nav-item menu-open">
-            <a href="/member" class="nav-link ">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Room list
-              </p>
-            </a>
-          </li>
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link ">
-              <i class="nav-icon fas fa-bars"></i>
-              <p>
-                Book room
-              </p>
-            </a>
-          </li>
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link ">
-              <i class="nav-icon fas fa-comments"></i>
-              <p>
-                Comments
-              </p>
-            </a>
-          </li> -->
+          <li class="nav-item mt-5">
+              <a href="/signout" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i>
+                <p>SignOut</p>
+              </a>
+            </li>
+          
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -242,32 +194,11 @@
     <!-- /.content -->
   </div>
 
-  <!-- Footer -->
-  <!-- <footer class="main-footer">
-    <strong><a href="#">HotelManager</a></strong>
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Thecappahotel@gmail.com</b>
-    </div>
-  </footer> -->
+  
 </div>
 <!-- ./wrapper -->
 
 
-<!-- <script src="% static 'assets/css/Admin/admin/assets/plugins/jquery/jquery.min.js' %"></script> -->
-<!-- <script src="% static 'assets/css/Admin/admin/assets/plugins/jquery-ui/jquery-ui.min.js' %"></script>
-<script src="% static 'assets/css/Admin/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %"></script>
-<script src="% static 'assets/css/Admin/admin/assets/plugins/chart.js/Chart.min.js' %"></script>
-<script src="% static 'assets/css/Admin/admin/assets/plugins/sparklines/sparkline.js' %"></script>
-<script src="% static 'assets/css/Admin/admin/assets/plugins/jqvmap/jquery.vmap.min.js' %"></script>
-<script src="% static 'assets/css/Admin/admin/assets/plugins/jqvmap/maps/jquery.vmap.usa.js' %"></script>
-<script src="% static 'assets/css/Admin/admin/assets/plugins/jquery-knob/jquery.knob.min.js' %"></script>
-<script src="% static 'assets/css/Admin/admin/assets/plugins/moment/moment.min.js' %"></script>
-<script src="assets/css/Admin/admin/assets/plugins/daterangepicker/daterangepicker.js' %"></script>
-<script src="% static 'assets/css/Admin/admin/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %"></script>
-<script src="% static 'assets/css/Admin/admin/assets/plugins/summernote/summernote-bs4.min.js' %"></script>
-<script src="% static 'assets/css/Admin/admin/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' %"></script>
-<script src="% static 'assets/css/Admin/admin/assets/js/adminlte.js' %"></script>
-<script src="% static 'assets/css/Admin/admin/assets/js/demo.js"></script>
-<script src="% static 'assets/css/Admin/admin/assets/js/pages/dashboard.js' %"></script> -->
+
 </body>
 </html>
