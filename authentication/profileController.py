@@ -12,7 +12,7 @@ def view(request):
     student_name = request.session.get('student_name')
 
     if not student_id:
-        return redirect('signin')
+        return redirect('home')
 
     student = TblStudents.objects.get(pk=student_id)
 

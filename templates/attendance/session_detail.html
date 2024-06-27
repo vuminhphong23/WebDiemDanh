@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Dashboard</title>
+  <title>Danh sách điểm danh</title>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -19,48 +18,23 @@
   <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/summernote/summernote-bs4.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
-  <style>
-    #up {
-      padding: 5px 10px;
-      background-color: #009879;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      font-size: 14px;
-      transition: background-color 0.3s ease;
-    }
-
-    #up:hover {
-      background-color: #06b693;
-    }
-
-    #up:focus {
-      outline: none;
-    }
-  </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-  <!-- Sidebar -->
+  <!-- Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
       <img src="{% static 'assets/images/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Teacher</span>
     </a>
-
     <!-- Sidebar -->
     <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="info">
-          <a href="#" class="d-block">{{ request.user.username }}</a>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="info">
+              <a href="#" class="d-block">{{ request.user.username }}</a>
+            </div>
         </div>
-      </div>
-
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -94,59 +68,53 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-  <!-- /.Sidebar -->
 
-  <!-- Content -->
+  <!-- Content Wrapper -->
   <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
-      <div class="content-header">
-        <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1 class="m-0">Điểm danh</h1>
-            </div>
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Danh sách điểm danh cho {{ session.classroom.class_name }} on {{ session.date }}</h1>
           </div>
         </div>
       </div>
-      <!-- /.content-header -->
+    </div>
 
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="container">
-            <table class="content-table">
-                <thead>
-                    <tr>
-                        <th>Mã lớp học</th>
-                        <th>Tên lớp học</th>
-                        <th>Tên giáo viên</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for classroom in classrooms %}
-                    <tr>
-                        <td>{{ classroom.class_id }}</td>
-                        <td>{{ classroom.class_name }}</td>
-                        <td>{{ classroom.teacher.username }}</td>
-                        <td>
-                            <a href="{% url 'classroom_attendance_detail' classroom.class_id %}"><button id="up">Xem chi tiêt</button></a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-          </div>
+          <table class="content-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Email</th>
+                <th>Attended</th>
+                <th>Date</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for attendance in attendance_details %}
+              <tr>
+                <td>{{ attendance.student.name }}</td>
+                <td>{{ attendance.student.email }}</td>
+                <td>{{ attendance.attended }}</td>
+                <td>{{ attendance.date }}</td>
+                <td>{{ attendance.time }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-      </section>
-    </div>
+        <a href="{% url 'diemdanh' classroom_id=session.classroom.class_id session_id=session.session_id %}">
+            <button id="new3">Điểm danh</button>
+        </a>
+      </div>
+    </section>
   </div>
-
-  <!-- Scripts -->
-  <script src="{% static 'assets/js/jquery.min.js' %}"></script>
-  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'assets/js/adminlte.min.js' %}"></script>
-  <script src="{% static 'assets/js/demo.js' %}"></script>
-  <script src="{% static 'assets/js/pages/dashboard.js' %}"></script>
+</div>
 </body>
 </html>
