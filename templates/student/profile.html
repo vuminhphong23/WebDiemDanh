@@ -241,7 +241,7 @@
                         <h2>Thông tin cá nhân</h2>
         
                         <label for="student_id">Mã Sinh Viên:</label>
-                        <input type="text" id="student_id" name="student_id" value="{{ student_id }}" disabled>
+                        <input type="text" id="student_id" name="student_id" value="{{ student_id }}" readonly>
                 
                         <label for="name">Họ Tên:</label>
                         <input type="text" id="name" name="name" value="{{ name }}" {% if not edit_mode %}readonly{% endif %}>
@@ -329,8 +329,10 @@
             function enableFormEditing(form) {
                 const inputs = form.querySelectorAll('input:not([type="submit"])');
                 inputs.forEach(input => {
-                    input.removeAttribute('readonly');
-                    input.removeAttribute('disabled');
+                    if (input.id !== 'student_id') {
+                        input.removeAttribute('readonly');
+                        input.removeAttribute('disabled');
+                    }
                 });
 
                 if (form.id === 'profile-form') {

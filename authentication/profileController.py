@@ -30,7 +30,6 @@ def update_profile(request):
     student_id = request.session.get('student_id')
     if student_id:
         if request.method == 'POST':
-            student_id = request.POST.get('student_id')
             name = request.POST.get('name')
             email = request.POST.get('email')
             phone = request.POST.get('phone')
