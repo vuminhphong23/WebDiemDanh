@@ -10,7 +10,7 @@
     <script src="https://kit.fontawesome.com/7b9d8c4ddc.js" crossorigin="anonymous"></script>
     <title>Trang chủ</title>
     <style>
-        .container {
+       .container {
             display: flex;
         }
 
@@ -18,11 +18,14 @@
             width: 80%;
             padding: 20px;
             box-sizing: border-box;
-            color: #fff; /* Màu chữ chính */
+            background-color: #fff; /* Màu nền trắng */
+            color: #000; /* Màu chữ chính */
+            border-radius: 8px; /* Bo góc container */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng cho container */
         }
 
         .content-student h2 {
-            color: #009879; /* Màu tiêu đề */
+            color: #000; /* Màu tiêu đề */
             font-size: 24px; /* Kích thước tiêu đề */
             margin-bottom: 10px; /* Khoảng cách dưới của tiêu đề */
         }
@@ -40,27 +43,34 @@
         }
 
         table thead tr {
-            background-color: #009879;
+            background-color: #3c5398;
             color: white;
             text-align: left;
             font-weight: bold;
+            transition: background-color 0.3s ease;
         }
 
         table th, table td {
             padding: 12px 15px;
             border: 1px solid #ddd;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         table tbody tr {
             border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s ease;
         }
         
         table tbody tr:last-of-type {
-            border-bottom: 2px solid #009879;
+            border-bottom: 2px solid #3c5398;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
         }
 
         .details-button {
-            background-color: #009879;
+            background-color: #3c5398;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -71,6 +81,12 @@
             margin: 4px 2px;
             cursor: pointer;
             border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .details-button:hover {
+            background-color: #2b3d78;
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -93,7 +109,7 @@
         <div class="sidebar-menu">
             <p><a href="/"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-house"></i>Trang chủ</a></p>
             <p><a href="/class_students"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-table"></i>Xem lớp</a></p>
-            <p><a href="/attendance_students"><i style="margin-right: 12px; color: #fff;" class="fa-regular fa-calendar-days"></i>Điểm danh</a></p>
+            <p><a style="color: #f8843d;" href="/attendance_students"><i style="margin-right: 12px; color: #fff;" class="fa-regular fa-calendar-days"></i>Điểm danh</a></p>
             <p><a href="/profile"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-user"></i>Profile</a></p>
             <p><a href="/signout"><i style="margin-right: 12px; color: #fff; margin-top: 330px;" class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></p>
         </div>

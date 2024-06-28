@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, JsonResponse
-
+from django.contrib.auth.hashers import make_password
 from authentication.capPictureController import capture_images
 from .models import TblStudents
 from django.views.decorators.csrf import csrf_exempt
@@ -22,13 +22,20 @@ def view(request):
         student.phone = request.POST.get('phone')
         student.iCap = request.POST.get('iCap') == 'on'
         date_birth_str = request.POST.get('date_birth')
+        
         # Chuyển đổi date_birth_str thành đối tượng datetime.date
         try:
             student.date_birth = datetime.strptime(date_birth_str, '%Y-%m-%d').date()
         except (ValueError, TypeError):
             student.date_birth = None
+
+        # Handle password change
+        password = request.POST.get('password')
+        if password:
+            student.password = make_password(password)
+        
         student.save()
-        # Cập nhật context sau khi lưu thông tin
+
         context = {
             "fname": student_name,
             "student_id": student.student_id,
