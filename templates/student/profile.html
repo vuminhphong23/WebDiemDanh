@@ -1,43 +1,53 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Thông tin sinh viên</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'assets/css/home.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Poppins:wght@300&family=Roboto:ital,wght@0,300;0,400;0,500;1,100;1,300&family=Satisfy&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/7b9d8c4ddc.js" crossorigin="anonymous"></script>
+    <title>Trang chủ</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #e9ecef;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
+        /* Your CSS styles here */
         .container {
-            max-width: 600px;
-            width: 100%;
-            padding: 30px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            transition: transform 0.3s ease;
+            display: flex;
         }
 
-        .container:hover {
-            transform: translateY(-5px);
+        .content-student {
+            width: 86%;
+            height: 93%;
+            padding: 20px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            background-color: #fff; /* Màu nền trắng */
+            color: #000; /* Màu chữ chính */
+            border-radius: 30px; /* Bo góc container */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng cho container */
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 cột với độ rộng chia đều */
+            gap: 80px; /* Khoảng cách giữa các cột */
         }
 
-        h2 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 24px;
+        .content-student h2 {
+            color: #000; /* Màu tiêu đề */
+            font-size: 23px; /* Kích thước tiêu đề */
+            margin-bottom: 10px; /* Khoảng cách dưới của tiêu đề */
         }
 
+        .content-student p {
+            margin-bottom: 8px; /* Khoảng cách dưới của đoạn văn bản */
+        }
+        
+        .content-student1{
+            margin-left: -150px;
+            width: 400px;
+        }
+        .content-student2{
+            margin-left: -50px;
+        }
         .info {
             margin-top: 20px;
         }
@@ -45,7 +55,7 @@
         .info label {
             display: block;
             margin-bottom: 5px;
-            font-weight: bold;
+            font-weight:500;
             color: #555;
         }
 
@@ -56,7 +66,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
-            color: #555;
+            color: gray;
             transition: border-color 0.3s ease, background-color 0.3s ease;
         }
 
@@ -73,7 +83,7 @@
             display: block;
             width: 100%;
             padding: 10px;
-            background-color: #007bff;
+            background-color: #2B3D78;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -83,110 +93,364 @@
         }
 
         .info button:hover {
-            background-color: #0056b3;
+            transform: scale(1.01);
         }
 
-        .info a {
-            display: block;
+
+        
+
+        .details-button {
+            background-color: #3c5398;
+            color: white;
+            border: none;
+            padding: 7px 10px;
             text-align: center;
-            margin-top: 20px;
-            color: #007bff;
             text-decoration: none;
-            transition: color 0.3s ease;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
-        .info a:hover {
-            color: #0056b3;
+        .details-button:hover {
+            background-color: #2b3d78;
+            transform: scale(1.05);
+        }
+
+
+        .content-img {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 170px;
+            height: 200px;
+            border: 1px solid #d3d3d3;
+            border-radius: 10px;
+            background-color: #e1e8ed;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .content-img .info {
+            text-align: center;
+        }
+
+        .avatar-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: -5px;
+        }
+
+        .avatar-icon i {
+            font-size: 130px;
+            color: #7a8a94;
+            
         }
 
         .capture-button {
-            display: block;
-            width: 50px;
-            height: 50px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            bottom: 20px;
-            right: 20px;
+            position: relative;
+            left: 60px;
+            top: -5px;
         }
 
-        .capture-button:hover {
-            background-color: #0056b3;
-            transform: scale(1.1);
+        .capture-button button {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: none;
+            background-color: #e1e8ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
         }
+
+        .capture-button button i {
+            font-size: 18px;
+            color: #7a8a94;
+        }
+        .capture-button:hover {
+            transform: scale(1.3);
+        }
+        #pw-cancel-btn, #cancel-btn{
+            margin-top: 10px;
+            background:red;
+        }
+
     </style>
 </head>
 <body>
+    <div class="header">
+        <input class="search" type="text" placeholder="Tìm kiếm thông tin">
+        <ul>
+            {% if user.is_authenticated %}   
+                <li><button type="submit"><a href="/dashboard">Trang chủ</a></button></li>
+            {% elif request.session.student_id %}
+                <li><button type="submit"><a href="/profile">Xin chào, {{request.session.student_name}} !</a></button></li>
+            {% else %}
+                <li><button type="submit"><a href="/signin">Đăng nhập</a></button></li>
+            {% endif %}
+        </ul>   
+    </div>
+
     <div class="container">
-        <h2>Thông tin cá nhân {{ fname }}</h2>
-        <form method="POST">
-            {% csrf_token %}
-            <div class="info">
-                <label for="student_id">Mã Sinh Viên:</label>
-                <input type="text" id="student_id" name="student_id" value="{{ student_id }}" readonly>
+        <div class="sidebar-menu">
+            <p><a href="/"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-house"></i>Trang chủ</a></p>
+            <p><a href="/class_students"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-table"></i> Xem lớp</a></p>
+            <p><a href="/attendance_students"><i style="margin-right: 12px; color: #fff;" class="fa-regular fa-calendar-days"></i> Điểm danh</a></p>
+            <p><a style="color: #f8843d;" href="/profile"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-user"></i> Profile</a></p>
+            <p><a href="/signout"><i style="margin-right: 12px; color: #fff; margin-top: 330px;" class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></p>
+        </div>
+        <div class="content-student">
+            <div>
+                <div class="info">
+                    <h2>Ảnh cá nhân</h2>
+                </div>
+                <div class="content-img">
+                    <div class="info">
+                        <div class="avatar-icon">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="capture-button">
+                        <button id="capture-btn" onclick="captureImages()">
+                            <i class="fa-solid fa-camera"></i>
+                        </button>
+                    </div>
+                </div>
+                <br>
+                {% if iCap %}
+                    <p style="color: #2B3D78;"> Đã cập nhật ảnh</p>
+                {% else %}
+                    <p style="color: red"> Chưa cập nhật ảnh</p>
+                {% endif %}
 
-                <label for="name">Họ Tên:</label>
-                <input type="text" id="name" name="name" value="{{ name }}" readonly>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="{{ email }}" readonly>
-
-                <label for="phone">Số Điện Thoại:</label>
-                <input type="text" id="phone" name="phone" value="{{ phone }}" readonly>
-
-                <label for="iCap">Trạng Thái iCap:</label>
-                <input type="text" id="iCap" name="iCap" value="{{ iCap }}" readonly>
-
-                <label for="date_birth">Ngày Sinh:</label>
-                <input type="date" id="date_birth" name="date_birth" value="{{ date_birth }}" readonly>
-
-                <label for="password">Mật khẩu mới:</label>
-                <input type="password" id="password" name="password">
-
-                <button type="button" id="edit-btn">Chỉnh Sửa</button>
-                <button type="submit" id="save-btn" style="display:none;">Lưu</button>
-                    
-                <a href="/dashboard">Quay về trang chủ</a>
             </div>
-        </form>
-        <button class="capture-button" id="capture-button"><i class="fas fa-camera-retro"></i></button>
+            <div class="content-student1">
+                <form method="POST" id="profile-form" action="{% url 'update_profile' %}">
+                    {% csrf_token %}
+                    <div class="info">
+                        <h2>Thông tin cá nhân</h2>
+        
+                        <label for="student_id">Mã Sinh Viên:</label>
+                        <input type="text" id="student_id" name="student_id" value="{{ student_id }}" disabled>
+                
+                        <label for="name">Họ Tên:</label>
+                        <input type="text" id="name" name="name" value="{{ name }}" {% if not edit_mode %}readonly{% endif %}>
+                
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" value="{{ email }}" {% if not edit_mode %}readonly{% endif %}>
+                
+                        <label for="phone">Số Điện Thoại:</label>
+                        <input type="text" id="phone" name="phone" value="{{ phone }}" {% if not edit_mode %}readonly{% endif %}>
+        
+                        <label for="date_birth">Ngày Sinh:</label>
+                        <input type="date" id="date_birth" name="date_birth" value="{{ date_birth|date:'Y-m-d' }}" {% if not edit_mode %}readonly{% endif %}>
+                        
+                        {% if not edit_mode %}
+                            <button type="button" id="edit-btn">Chỉnh Sửa</button>
+                            <button type="submit" id="save-btn" style="display: none;">Lưu</button>
+                            <button type="button" id="cancel-btn" style="display: none;">Hủy</button>
+                        {% else %}
+                            <button type="submit" id="save-btn">Lưu</button>
+                            <button type="button" id="cancel-btn">Hủy</button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+            <div class="content-student2">
+                <form method="POST" id="password-form" action="{% url 'change_password' %}">
+                    {% csrf_token %}
+                    <div class="info">
+                        <h2>Thay đổi mật khẩu</h2>
+                        <label for="password">Mật khẩu mới:</label>
+                        <input type="password" id="password" name="password" {% if not pw_edit_mode %}disabled{% endif %}>
+                        
+                        <label for="password_confirm">Xác nhận mật khẩu:</label>
+                        <input type="password" id="password_confirm" name="password_confirm" {% if not pw_edit_mode %}disabled{% endif %}>
+                        
+                        {% if not pw_edit_mode %}
+                            <button type="button" id="pw-edit-btn">Đổi Mật Khẩu</button>
+                            <button type="submit" id="pw-save-btn" style="display: none;">Lưu</button>
+                            <button type="button" id="pw-cancel-btn" style="display: none;">Hủy</button>
+                        {% else %}
+                            <button type="submit" id="pw-save-btn">Lưu</button>
+                            <button type="button" id="pw-cancel-btn">Hủy</button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script>
-        document.getElementById('edit-btn').addEventListener('click', function() {
-            document.querySelectorAll('.info input').forEach(input => input.removeAttribute('readonly'));
-            document.getElementById('edit-btn').style.display = 'none';
-            document.getElementById('save-btn').style.display = 'block';
-        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById('edit-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const cancelBtn = document.getElementById('cancel-btn');
+            const profileForm = document.getElementById('profile-form');
+            const pwEditBtn = document.getElementById('pw-edit-btn');
+            const pwSaveBtn = document.getElementById('pw-save-btn');
+            const pwCancelBtn = document.getElementById('pw-cancel-btn');
+            const passwordForm = document.getElementById('password-form');
+            const captureBtn = document.getElementById('capture-btn');
+            
+            let originalProfileValues = {};
+            let originalPasswordValues = {};
 
-        document.getElementById('capture-button').addEventListener('click', function(event) {
-            event.preventDefault();
-            captureImages();
-        });
-
-        function captureImages() {
-            fetch("{% url 'cappicture' student_id name %}", {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                },
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.status === 'success') {
-                    alert('Images captured and uploaded successfully!');
-                } else {
-                    alert('Failed to capture images.');
-                }
-            })
-            .catch(error => {
-                console.error('Error capturing images:', error);
+            editBtn.addEventListener('click', function () {
+                enableFormEditing(profileForm);
+                storeOriginalValues(profileForm, originalProfileValues);
             });
-        }
+
+            cancelBtn.addEventListener('click', function () {
+                disableFormEditing(profileForm);
+                restoreOriginalValues(profileForm, originalProfileValues);
+            });
+
+            pwEditBtn.addEventListener('click', function () {
+                enableFormEditing(passwordForm);
+                storeOriginalValues(passwordForm, originalPasswordValues);
+            });
+
+            pwCancelBtn.addEventListener('click', function () {
+                disableFormEditing(passwordForm);
+                restoreOriginalValues(passwordForm, originalPasswordValues);
+            });
+
+            function enableFormEditing(form) {
+                const inputs = form.querySelectorAll('input:not([type="submit"])');
+                inputs.forEach(input => {
+                    input.removeAttribute('readonly');
+                    input.removeAttribute('disabled');
+                });
+
+                if (form.id === 'profile-form') {
+                    editBtn.style.display = 'none';
+                    saveBtn.style.display = 'block';
+                    cancelBtn.style.display = 'block';
+                } else if (form.id === 'password-form') {
+                    pwEditBtn.style.display = 'none';
+                    pwSaveBtn.style.display = 'block';
+                    pwCancelBtn.style.display = 'block';
+                }
+            }
+
+            function disableFormEditing(form) {
+                const inputs = form.querySelectorAll('input:not([type="submit"])');
+                inputs.forEach(input => {
+                    input.setAttribute('readonly', true);
+                    input.setAttribute('disabled', true);
+                });
+
+                if (form.id === 'profile-form') {
+                    editBtn.style.display = 'block';
+                    saveBtn.style.display = 'none';
+                    cancelBtn.style.display = 'none';
+                } else if (form.id === 'password-form') {
+                    pwEditBtn.style.display = 'block';
+                    pwSaveBtn.style.display = 'none';
+                    pwCancelBtn.style.display = 'none';
+                }
+            }
+
+            function storeOriginalValues(form, originalValues) {
+                const inputs = form.querySelectorAll('input:not([type="submit"])');
+                inputs.forEach(input => {
+                    originalValues[input.name] = input.value;
+                });
+            }
+
+            function restoreOriginalValues(form, originalValues) {
+                const inputs = form.querySelectorAll('input:not([type="submit"])');
+                inputs.forEach(input => {
+                    input.value = originalValues[input.name];
+                });
+            }
+
+            profileForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const formData = new FormData(profileForm);
+                const url = profileForm.getAttribute('action');
+
+                fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success') {
+                        alert('Thông tin đã được cập nhật thành công!');
+                        disableFormEditing(profileForm);
+                    } else {
+                        alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating profile:', error);
+                });
+            });
+
+            passwordForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const formData = new FormData(passwordForm);
+                const url = passwordForm.getAttribute('action');
+
+                fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success') {
+                        alert('Mật khẩu đã được thay đổi thành công!');
+                        disableFormEditing(passwordForm);
+                    } else {
+                        alert(result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error changing password:', error);
+                });
+            });
+        
+            function captureImages() {
+                fetch("{% url 'cappicture' student_id=student_id name=name %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success') {
+                        alert('Đã chụp và tải ảnh lên thành công!');
+                    } else {
+                        alert('Đã xảy ra lỗi khi chụp ảnh.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi khi chụp ảnh:', error);
+                });
+            }
+        });
     </script>
 </body>
 </html>
+
+
+
