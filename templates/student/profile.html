@@ -4,6 +4,7 @@
     <title>Thông tin sinh viên</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
         body {
             font-family: 'Roboto', sans-serif;
@@ -34,6 +35,7 @@
             color: #333;
             text-align: center;
             margin-bottom: 20px;
+            font-size: 24px;
         }
 
         .info {
@@ -49,16 +51,22 @@
 
         .info input {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
             color: #555;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
         }
 
         .info input[readonly] {
             background-color: #f9f9f9;
+        }
+
+        .info input:focus {
+            border-color: #007bff;
+            background-color: #fff;
         }
 
         .info button {
@@ -71,16 +79,50 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .info button:hover {
             background-color: #0056b3;
         }
+
+        .info a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .info a:hover {
+            color: #0056b3;
+        }
+
+        .capture-button {
+            display: block;
+            width: 50px;
+            height: 50px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .capture-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Chào mừng, {{ fname }}!</h2>
+        <h2>Thông tin cá nhân {{ fname }}</h2>
         <form method="POST">
             {% csrf_token %}
             <div class="info">
@@ -102,14 +144,16 @@
                 <label for="date_birth">Ngày Sinh:</label>
                 <input type="date" id="date_birth" name="date_birth" value="{{ date_birth }}" readonly>
 
+                <label for="password">Mật khẩu mới:</label>
+                <input type="password" id="password" name="password">
+
                 <button type="button" id="edit-btn">Chỉnh Sửa</button>
                 <button type="submit" id="save-btn" style="display:none;">Lưu</button>
                     
                 <a href="/dashboard">Quay về trang chủ</a>
-                <br><br>
             </div>
         </form>
-        <a href="#" id="capture-button"><button style="width: 20px;height: 30px;"><i class="fa-solid fa-camera-retro" style="color: #16356a;"></i></button></a>
+        <button class="capture-button" id="capture-button"><i class="fas fa-camera-retro"></i></button>
     </div>
 
     <script>
@@ -118,38 +162,31 @@
             document.getElementById('edit-btn').style.display = 'none';
             document.getElementById('save-btn').style.display = 'block';
         });
-    </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const captureButton = document.getElementById('capture-button');
-
-            captureButton.addEventListener('click', function(event) {
-                event.preventDefault();
-                captureImages();
-            });
-
-            function captureImages() {
-                fetch("{% url 'cappicture' student_id name %}", {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
-                    },
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.status === 'success') {
-                        alert('Images captured and uploaded successfully!');
-                        location.reload();  // Reload the page
-                    } else {
-                        alert('Failed to capture images.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error capturing images:', error);
-                });
-            }
+        document.getElementById('capture-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            captureImages();
         });
+
+        function captureImages() {
+            fetch("{% url 'cappicture' student_id name %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    alert('Images captured and uploaded successfully!');
+                } else {
+                    alert('Failed to capture images.');
+                }
+            })
+            .catch(error => {
+                console.error('Error capturing images:', error);
+            });
+        }
     </script>
 </body>
 </html>
