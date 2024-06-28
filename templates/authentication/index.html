@@ -14,14 +14,12 @@
 </head>
 <body>
     <div class="header">
-        <input type="text" placeholder="Tìm kiếm thông tin">
+        <input class="search" type="text" placeholder="Tìm kiếm thông tin">
          <ul>
                 {% if user.is_authenticated %}   
-                
                 <li><button type="submit"><a href="/dashboard">Trang chủ</a></button></li>
                 {% elif request.session.student_id %}
-                <!-- <li>{{fname}}</li> -->
-                <li><button type="submit"><a href="/profile">Trang cá nhân</a></button></li>
+                <li><button type="submit"><a href="/profile">Xin chào, {{request.session.student_name}} !</a></button></li>
                 {% else %}
                 <li><button type="submit"><a href="/signin">Đăng nhập</a></button></li>
                 {% endif %}
@@ -31,9 +29,9 @@
     <div class="container">
         <div class="sidebar-menu">
             <p><a style="color: #f8843d;" href="/"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-house"></i>Trang chủ</a></p>
-            <p><a href="/class_students"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-table"></i>Xem lớp</a></p>
-            <p><a href="/attendance_students"><i style="margin-right: 12px; color: #fff;" class="fa-regular fa-calendar-days"></i>Điểm danh</a></p>
-            <p><a href="/profile"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-user"></i>Profile</a></p>
+            <p><a href="/class_students"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-table"></i> Xem lớp</a></p>
+            <p><a href="/attendance_students"><i style="margin-right: 12px; color: #fff;" class="fa-regular fa-calendar-days"></i> Điểm danh</a></p>
+            <p><a href="/profile"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-user"></i> Profile</a></p>
             <p><a href="/signout"><i style="margin-right: 12px; color: #fff; margin-top: 330px;" class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></p>
         </div>
         <div class="content">
