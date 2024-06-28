@@ -1,7 +1,9 @@
 from os import listdir
 import os
 from os.path import isdir, join
+from django.contrib import messages
 import tempfile
+from django.shortcuts import redirect
 import numpy as np
 import cv2
 from django.http import HttpResponse
@@ -250,3 +252,4 @@ if __name__ == "__main__":
 def embeddings(request):
     main()
     return HttpResponse("Images captured, saved, and embeddings created successfully.")
+

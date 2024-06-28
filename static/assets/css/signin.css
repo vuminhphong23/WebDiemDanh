@@ -4,14 +4,16 @@
     box-sizing: border-box;
     text-decoration: none;
     list-style-type: none;
-    font-family: poppins;
+    /* font-family: poppins; */
+    font-family: 'Source Sans Pro';
 }
 html{
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     scroll-behavior: smooth;
 }
 body{
-    background: white;
+    /* background: white; */
+    background-color: #EEEEEE;
 }
 header{
     width: 100%;
@@ -22,6 +24,8 @@ header{
     justify-content: space-between;
     padding: 0 100px;
     padding-top: 2px;
+    /* background-color: #3498db; */
+
 }
 header .logo a{
     font-size: 30px;
@@ -65,26 +69,29 @@ header .logo a{
 .container{
     min-height: calc(100vh - 40px * 2);
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 35% 65%;
     border-radius: 10px;
     overflow: hidden;
+    /* background-color: red; */
 }
 .login-left{
-    margin-left: 100px;
+    /* margin-left: 100px; */
     margin-bottom: 10px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
     justify-content: content;
     /* padding-left: 551px; */
-    padding-left: 100px;
+    padding-left: 70px;
     /* background-color: red; */
-    border-radius: 10px;
-
+    /* border-radius: 10px; */
 }
-/* .login-right{
+.login-right{
     display: flex;
     justify-content: center;
-} */
+    background-color: #334A71;
+    border-top-left-radius: 500px;
+
+}
 .form-item {
     position: relative;
     /* margin-bottom: 20px;  */
@@ -120,53 +127,55 @@ header .logo a{
     color: #212022a9;
 }
 .login-right img{
+    padding: 150px;
+    /* margin-top: 100px; */
     width: 100%;
-    height: 75%;
+    height: 85%;
 }
 .login-header{
     /* margin-top: 50px; */
 }
 .login-header h1{
-    font-size: 2rem;
+    /* font-size: 2rem; */
+    font-size: 25px;
     font-weight: 700;
-    padding-top: 15px;
+    padding-top: 130px;
 }
 .login-header p{
     margin-top: 20px;
     opacity: .7;
 }
 .login-form{
-    width: 450px;
+    width: 380px;
     margin-top: 20px;
 }
 .login-content{
     display: flex;
     flex-direction: column;
-    gap: 35px;
+    gap: 25px;
 }
 .login-footer{
     display: flex;
     gap: 30px;
     /* margin-top: 10px; */
+    justify-content: space-between;
     font-size: 1rem;
 }
-.login-footer a{
-    flex: 6;
-    gap: 15px;
+.login-footer a {
+    flex: 1;
     background-color: #eee;
     border-radius: 100px;
     padding: .6rem;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    color: black;
-    text-decoration: none;
+    text-align: center;
+    color: #334A71;
+    text-decoration: underline;
     cursor: pointer;
     transition: .5s;
 }
 .login-footer a:hover{
-    background-color: black;
-    color: white;
+    /* background-color: black; */
+    color: #2656a8;
+    text-decoration: underline;
 }
 .form-tem label:not(.checkboxLabel){
     display: inline-block;
@@ -176,13 +185,14 @@ header .logo a{
     padding: 0 10px;
     transform: translate(30px, -10px);
     font-size: 14px;
+    
 }
 input[type='email'],
 input[type='password'],
 input[type='text']
 {
     border: 1px solid black;
-    height: 55px;
+    height: 50px;
     /* height: 45px; */
     padding: 0 2rem;
     width: 100%;
@@ -193,8 +203,9 @@ input[type='text']
 }
 
 select.form-select {
+    margin-bottom: 55px;
     border: 1px solid black;
-    height: 55px;
+    height: 50px;
     padding: 0 2rem;
     width: 100%;
     outline: none;
@@ -204,7 +215,7 @@ select.form-select {
     appearance: none; /* Ẩn mũi tên mặc định của thẻ select */
     -webkit-appearance: none; /* Ẩn mũi tên mặc định trong các trình duyệt WebKit */
     -moz-appearance: none; /* Ẩn mũi tên mặc định trong Firefox */
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,0 5,10" fill="black"/></svg>'); /* Tạo mũi tên tùy chỉnh */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="3" height="3" viewBox="0 0 10 10"><polygon points="0,0 10,0 5,10" fill="gray"/></svg>'); /* Tạo mũi tên tùy chỉnh */
     background-repeat: no-repeat;
     background-position: right 1rem center;
     background-size: 1rem;
@@ -244,7 +255,7 @@ label[for = email],
 label[for = password],
 label[for = text]{
     font-size: 1.1rem;
-    padding-left: 20px;
+    padding-left: 10px;
     font-weight: 4600;;
 }
 .checkbox{
@@ -260,15 +271,16 @@ input[type="checkbox"]{
 button{
     border: none;
     padding: 1rem;
-    height: 55px;
+    height: 50px;
     font-size: 18px;
     border-radius: 10px;
     text-transform: uppercase;
     cursor: pointer;
     margin-bottom: 30px;
     transition: .5s;
-    background: black;
+    background: #223671;
     color: white;
+    margin-top: 10px;
 }
 button:hover{
     /* background: rgb(12, 102, 141); */
@@ -385,12 +397,6 @@ button:hover{
         display: none;
     }
 
-    
-
-    
-   
-
-
 }
 
 
@@ -400,12 +406,13 @@ button:hover{
     border: 1px solid #f5c6cb; /* Red border */
     color: #721c24; /* Dark red text */
     padding: 15px;
-    margin: 10px 0;
+    /* margin: 10px 0; */
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
     position: relative;
     animation: fadeIn 0.5s ease-in-out;
+    margin-bottom: 35px;
 }
 
 .error-message .close {
@@ -450,12 +457,13 @@ button:hover{
     border: 1px solid #c3e6cb; /* Green border */
     color: #155724; /* Dark green text */
     padding: 15px;
-    margin: 10px 0;
+    /* margin: 10px 0; */
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
     position: relative;
     animation: fadeIn 0.5s ease-in-out;
+    margin-bottom: 35px;
 }
 
 .success-message .close {
@@ -790,4 +798,136 @@ button:hover{
 
 .body-loading {
     position: relative;
+}
+
+
+/* ===== Google Font Import - Poppins ===== */
+/* ===== Google Font Import - Poppins ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
+.select-menu {
+    width: 100%;
+    max-width: 380px;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.select-menu .select-btn {
+    display: flex;
+    height: 50px;
+    background: #fff;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: 400;
+    border-radius: 8px;
+    align-items: center;
+    cursor: pointer;
+    justify-content: space-between;
+    border: 1px solid black;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.select-btn i {
+    font-size: 25px;
+    transition: 0.3s;
+}
+
+.select-menu.active .select-btn i {
+    transform: rotate(-180deg);
+}
+
+.select-menu .options {
+    position: absolute;
+    width: 100%;
+    top: 60px;
+    padding: 20px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 0 3px rgba(0,0,0,0.1);
+    display: none;
+    z-index: 1;
+}
+
+.select-menu.active .options {
+    display: block;
+}
+
+.options .option {
+    display: flex;
+    height: 55px;
+    cursor: pointer;
+    padding: 0 16px;
+    border-radius: 8px;
+    align-items: center;
+    background: #fff;
+}
+
+.options .option:hover {
+    background: #F2F2F2;
+}
+
+.option i {
+    font-size: 25px;
+    margin-right: 12px;
+}
+
+.option .option-text {
+    font-size: 18px;
+    color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .select-menu {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    .select-menu .select-btn {
+        padding: 15px;
+        font-size: 16px;
+    }
+
+    .select-menu .options {
+        top: 50px;
+        padding: 15px;
+    }
+
+    .options .option {
+        height: 45px;
+        padding: 0 10px;
+    }
+
+    .option i {
+        font-size: 20px;
+    }
+
+    .option .option-text {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .select-menu .select-btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .select-menu .options {
+        top: 40px;
+        padding: 10px;
+    }
+
+    .options .option {
+        height: 40px;
+        padding: 0 8px;
+    }
+
+    .option i {
+        font-size: 18px;
+    }
+
+    .option .option-text {
+        font-size: 14px;
+    }
 }
