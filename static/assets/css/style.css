@@ -75,7 +75,7 @@
 }
 
 h1 {
-    color: #009879;
+    color: #223771;
 }
 
 .container1 input {
@@ -133,14 +133,14 @@ h1 {
     padding: 10px 16px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #009879;
+    background-color: #223771;
     color: white;
     border: none;
     border-radius: 4px;
 }
 
 .search-container button:hover {
-    background-color: #066552;
+    background-color: #172650;
 }
 
 
