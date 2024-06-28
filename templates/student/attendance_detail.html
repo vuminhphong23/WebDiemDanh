@@ -130,7 +130,7 @@
                     <td>{{ session.date|date:"d/m/Y" }}</td>
                     <td>{{ session.start_time }}</td>
                     <td>{{ session.end_time }}</td>
-                    <td><a style="color: #000;" href="{% url 'session_attendance' session.session_id %}">Xem chi tiết</a></td>
+                    <td><a href="{% url 'session_attendance' session.session_id %}" class="details-button">Xem chi tiết</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
