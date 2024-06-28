@@ -32,7 +32,7 @@
     <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="info">
-              <a href="#" class="d-block">{{ request.user.username }}</a>
+              <a href="#" class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
             </div>
         </div>
       <!-- Sidebar Menu -->
@@ -59,7 +59,7 @@
           <li class="nav-item mt-5">
             <a href="/signout" class="nav-link">
               <i class="fas fa-sign-out-alt"></i>
-              <p>SignOut</p>
+              <p>Đăng xuất</p>
             </a>
           </li>
         </ul>
@@ -76,7 +76,8 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Danh sách điểm danh cho {{ session.classroom.class_name }} on {{ session.date }}</h1>
+                <td>{{ attendance.student.name }}</td>
+            <h1 class="m-0">Danh sách điểm danh cho {{ session.classroom.class_name }} ngày {{ session.date|date:"d/m/Y" }} ({{session.start_time}} - {{session.end_time}})</h1>
           </div>
         </div>
       </div>
@@ -89,21 +90,27 @@
           <table class="content-table">
             <thead>
               <tr>
-                <th>Student Name</th>
+                <th>MSSV</th>
+                <th>Họ và tên</th>
                 <th>Email</th>
-                <th>Attended</th>
-                <th>Date</th>
-                <th>Time</th>
+                <th>Điểm danh</th>
+                <th>Ngày</th>
+                <th>Giờ</th>
               </tr>
             </thead>
             <tbody>
               {% for attendance in attendance_details %}
               <tr>
+                <td>{{ attendance.student.student_id }}</td>
                 <td>{{ attendance.student.name }}</td>
                 <td>{{ attendance.student.email }}</td>
-                <td>{{ attendance.attended }}</td>
-                <td>{{ attendance.date }}</td>
-                <td>{{ attendance.time }}</td>
+                {% if attendance.attended %}
+                    <td style="color: blue;">Có mặt</td>
+                {% else %}
+                    <td style="color: red;">Vắng mặt</td>
+                {% endif %}
+                <td>{{ attendance.date|date:"d/m/Y"|default:"" }}</td>
+                <td>{{ attendance.time|default:"" }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -111,6 +118,10 @@
         </div>
         <a href="{% url 'diemdanh' classroom_id=session.classroom.class_id session_id=session.session_id %}">
             <button id="new3">Điểm danh</button>
+        </a>
+
+        <a href="{% url 'export_to_excel' session_id=session.session_id %}">
+            <button id="export">Xuất file Excel</button>
         </a>
       </div>
     </section>

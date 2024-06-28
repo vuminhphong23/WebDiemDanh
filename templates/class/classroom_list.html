@@ -57,7 +57,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="info">
-            <a href="#" class="d-block">{{ request.user.username }}</a>
+            <a href="#" class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
           </div>
         </div>
 
@@ -85,7 +85,7 @@
             <li class="nav-item mt-5">
               <a href="/signout" class="nav-link">
                 <i class="fas fa-sign-out-alt"></i>
-                <p>SignOut</p>
+                <p>Đăng xuất</p>
               </a>
             </li>
           </ul>
@@ -120,7 +120,7 @@
                   <th>Mã lớp học</th>
                   <th>Tên lớp học</th>
                   <th>Tên giáo viên</th>
-                  <th>Action</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -128,7 +128,7 @@
                 <tr>
                   <td>{{ classroom.class_id }}</td>
                   <td>{{ classroom.class_name }}</td>
-                  <td>{{ classroom.teacher.username }}</td>
+                  <td>{{ classroom.teacher.first_name }} {{ classroom.teacher.last_name }}</td>
                   <td>
                     <a href="{% url 'classroom_detail' classroom.class_id %}"><button id="up">Xem chi tiết</button></a>
                   </td>

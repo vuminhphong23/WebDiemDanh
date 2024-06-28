@@ -23,8 +23,7 @@ urlpatterns = [
     path('classroom/<int:class_id>/attendance/', dashboardController.classroom_attendance_detail, name='classroom_attendance_detail'),
     path('session/<int:session_id>/attendance/', dashboardController.session_attendance_detail, name='session_attendance_detail'),
     path('diemdanh/<int:classroom_id>/<int:session_id>/', camera.diemdanh, name='diemdanh'),
-    
-    # path('export-to-excel/', dashboardController.export_to_excel, name='export_to_excel'),
+    path('export_attendance/<int:session_id>/', dashboardController.export_to_excel, name='export_to_excel'),
     
     path('profile', profileController.view, name='profile'),
     path('cappicture/<str:student_id>/<str:name>/', profileController.cappicture, name='cappicture'),

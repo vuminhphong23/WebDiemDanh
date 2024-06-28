@@ -16,6 +16,7 @@ class TblStudentsAdmin(admin.ModelAdmin):
     search_fields = ('name', 'email', 'phone')
     list_filter = ('date_birth', 'classrooms', 'iCap')
     exclude = ('password',)
+    change_list_template = "train/button_form.html"
 
     def display_classrooms(self, obj):
         return ", ".join([classroom.class_name for classroom in obj.classrooms.all()])
@@ -37,6 +38,7 @@ class ClassroomAdmin(admin.ModelAdmin):
     search_fields = ('class_name', 'teacher__username', 'subject')
     inlines = [TblStudentsInline]
     list_filter = ('teacher',)
+    
 
     def display_students(self, obj):
         return ", ".join([student.name for student in obj.students.all()])

@@ -48,6 +48,28 @@
     #clear-btn:hover {
       background-color: #ff6659;
     }
+    
+    #up {
+      padding: 5px 10px;
+      background-color: #009879;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+
+    #up:hover {
+      background-color: #06b693;
+    }
+
+    #up:focus {
+      outline: none;
+    }
+  
   </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -61,6 +83,11 @@
     </a>
     <!-- Sidebar -->
     <div class="sidebar">
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="info">
+          <a href="#" class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
+        </div>
+      </div>
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -85,7 +112,7 @@
           <li class="nav-item mt-5">
             <a href="/signout" class="nav-link">
               <i class="fas fa-sign-out-alt"></i>
-              <p>SignOut</p>
+              <p>Đăng xuất</p>
             </a>
           </li>
         </ul>
@@ -113,27 +140,29 @@
       <div class="container-fluid">
         <div class="container">
           <form method="get" action="">
-            <label for="date">Filter by Date:</label>
+            <label for="date">Tìm kiếm:</label>
             <input type="date" id="date" name="date" value="{{ date_filter }}">
-            <button type="submit" id="filter-btn">Filter</button>
-            <a href="{% url 'classroom_attendance_detail' classroom.class_id %}"><button type="button" id="clear-btn">Clear Filter</button></a>
+            <button type="submit" id="filter-btn">Tìm</button>
+            <a href="{% url 'classroom_attendance_detail' classroom.class_id %}"><button type="button" id="clear-btn">Hủy</button></a>
           </form>
           <table class="content-table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Details</th>
+                <th>Ngày</th>
+                <th>Giờ bắt đầu</th>
+                <th>Giờ kết thúc</th>
+                <th>Chi tiết</th>
               </tr>
             </thead>
             <tbody>
               {% for session in sessions %}
               <tr>
-                <td>{{ session.date }}</td>
+                <td>{{ session.date|date:"d/m/Y" }}</td>
                 <td>{{ session.start_time }}</td>
                 <td>{{ session.end_time }}</td>
-                <td><a href="{% url 'session_attendance_detail' session.session_id %}">View Details</a></td>
+                <td>
+                  <a href="{% url 'session_attendance_detail' session.session_id %}"><button id="up">Xem chi tiết</button></a>
+                </td>
               </tr>
               {% endfor %}
             </tbody>
