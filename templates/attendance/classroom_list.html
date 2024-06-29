@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Dashboard</title>
+  <title>Quản lý điểm danh</title>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -20,9 +20,19 @@
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
   <style>
+    .main-sidebar {
+      background-color: #223771;
+    }
+    .content-wrapper{
+      height: 695px !important;
+    }
+    .m-0 {
+        color: #223771;
+    }
+
     #up {
       padding: 5px 10px;
-      background-color: #009879;
+      background-color: #223771;
       color: white;
       border: none;
       border-radius: 5px;
@@ -34,7 +44,7 @@
     }
 
     #up:hover {
-      background-color: #06b693;
+      background-color: #172650;
     }
 
     #up:focus {
@@ -57,7 +67,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="info">
-          <a href="#" class="d-block">{{ request.user.username }}</a>
+          <a href="#" class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
         </div>
       </div>
 
@@ -83,9 +93,9 @@
             </a>
           </li>
           <li class="nav-item mt-5">
-            <a href="/signout" class="nav-link">
+            <a style="margin-top: 320px;" href="/signout" class="nav-link">
               <i class="fas fa-sign-out-alt"></i>
-              <p>SignOut</p>
+              <p>Đăng xuất</p>
             </a>
           </li>
         </ul>
@@ -120,7 +130,7 @@
                         <th>Mã lớp học</th>
                         <th>Tên lớp học</th>
                         <th>Tên giáo viên</th>
-                        <th>Action</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,7 +138,7 @@
                     <tr>
                         <td>{{ classroom.class_id }}</td>
                         <td>{{ classroom.class_name }}</td>
-                        <td>{{ classroom.teacher.username }}</td>
+                        <td>{{ classroom.teacher.first_name }} {{ classroom.teacher.last_name }}</td>
                         <td>
                             <a href="{% url 'classroom_attendance_detail' classroom.class_id %}"><button id="up">Xem chi tiêt</button></a>
                         </td>

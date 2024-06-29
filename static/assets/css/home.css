@@ -93,24 +93,30 @@ a {
 
 .sidebar-menu p a {
     color: #fff;
-    font-weight: 300;
+    font-weight: 400;
 }
+
 
 .sidebar-menu p a:hover {
     color: #f8843d;
 }
 
+.header{
+    padding-top: 10px;
+}
+
 .content{
     flex-basis: 87%;
-    height: 585px;
+    height: 93%;
     background-image: url("../images/content.png");
-    background-size: 100%; /* Ensures the image covers the entire content area */
+    background-size:cover; /* Ensures the image covers the entire content area */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-position: left center; 
     border-radius: 30px;
     background-color: #223771;
-    margin-top: 10px;
-    margin-right: 10px;
+    margin: 10px 15px 10px 2px;
+    padding: 20px;
+
 }
 
 
