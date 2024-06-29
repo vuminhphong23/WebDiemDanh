@@ -19,6 +19,14 @@
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
   <style>
+    .main-sidebar {
+      background-color: #223771;
+    }
+
+    .m-0 {
+        color: #223771;
+    }
+
     #filter-btn, #clear-btn {
       padding: 5px 10px;
       background-color: #009879;
@@ -142,7 +150,7 @@
           <form method="get" action="">
             <label for="date">Tìm kiếm:</label>
             <input type="date" id="date" name="date" value="{{ date_filter }}">
-            <button type="submit" id="filter-btn">Tìm</button>
+            <button style="background-color: #223771" type="submit" id="filter-btn">Tìm</button>
             <a href="{% url 'classroom_attendance_detail' classroom.class_id %}"><button type="button" id="clear-btn">Hủy</button></a>
           </form>
           <table class="content-table">

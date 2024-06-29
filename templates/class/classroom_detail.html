@@ -32,6 +32,14 @@
   <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
   <script src="https://kit.fontawesome.com/dc2a236791.js" crossorigin="anonymous"></script>
   <style>
+    .main-sidebar {
+      background-color: #223771;
+    }
+
+    .m-0 {
+        color: #223771;
+    }
+
     .btn-danger {
     padding: 11px 15px;
     background-color: #dc3545;
@@ -138,7 +146,7 @@
             <div class="search-container">
               <form method="get" action="#">
                 <input type="text" name="q" placeholder="Tìm kiếm sinh viên ..." value="{{ search_query }}">
-                <button type="submit">Tìm kiếm</button>
+                <button style="background-color: #223771" type="submit">Tìm kiếm</button>
                 {% if search_query %}
                     <a href="{% url 'classroom_detail' classroom.class_id %}" class="btn btn-danger ml-2">Hủy</a>
                 {% endif %}
