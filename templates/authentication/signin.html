@@ -1,93 +1,5 @@
 <!-- <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Đăng nhập</title>
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/fontawesome-free/css/all.min.css' %}">
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/css/adminlte.min.css' %}">
-  
-
-</head>
-<body class="hold-transition login-page">
-<div class="login-box">
-  <div class="login-logo">
-    <a href="#"><b>Đăng nhập</b> tài khoản</a>
-  </div>
-  <div class="card">
-    <div class="card-body login-card-body">
-      <p class="login-box-msg">Đăng nhập</p>
-
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            <strong>{{ message }}</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-        {% endfor %}
-      {% endif %}
-
-      <form action="/signin" method="post">
-        {% csrf_token %}
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" id="username" name="username" placeholder="Enter Your Username" Required>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Enter Your Password" Required>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-            <label for="last_name">Chức vụ</label>
-            <select class="form-control" id="is_superuser" name="is_superuser" required>
-              <option value="teacher">Giáo viên</option>
-                <option value="student">Sinh viên</option>
-            </select>
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Ghi nhớ mật khẩu
-              </label>
-            </div>
-          </div>
-          <div class="social-auth-links text-center mb-3" style="margin: 0 auto;">
-            <button type="submit" class="btn btn-block btn-danger">Đăng nhập</button>
-          </div>
-        </div>
-      </form>
-
-      
-
-      <p class="mb-1">
-        <a href="#">Quên mật khẩu</a>
-      </p>
-    </div>
-  </div>
-</div>
-</body>
-</html> -->
-
-
-
-<!DOCTYPE html>
-<html lang="en">
 
 <head>
       <meta charset="utf-8">
@@ -96,228 +8,244 @@
       {% load static %}
       <link rel="stylesheet" href="{% static 'assets/css/signin.css' %}"> 
       <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+      <script src="https://kit.fontawesome.com/dc2a236791.js" crossorigin="anonymous"></script>
     <title>Login</title>
-    <style>
-        .sk-fading-circle {
-            margin: 100px auto;
-            width: 40px;
-            height: 40px;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-        }
-
-        .sk-fading-circle .sk-circle {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-
-        .sk-fading-circle .sk-circle:before {
-            content: '';
-            display: block;
-            margin: 0 auto;
-            width: 15%;
-            height: 15%;
-            background-color: #3498db;
-            border-radius: 100%;
-            -webkit-animation: sk-circleFadeDelay 1.2s infinite ease-in-out both;
-                    animation: sk-circleFadeDelay 1.2s infinite ease-in-out both;
-        }
-
-        .sk-fading-circle .sk-circle2 {
-            -webkit-transform: rotate(30deg);
-                -ms-transform: rotate(30deg);
-                    transform: rotate(30deg);
-        }
-        .sk-fading-circle .sk-circle3 {
-            -webkit-transform: rotate(60deg);
-                -ms-transform: rotate(60deg);
-                    transform: rotate(60deg);
-        }
-        .sk-fading-circle .sk-circle4 {
-            -webkit-transform: rotate(90deg);
-                -ms-transform: rotate(90deg);
-                    transform: rotate(90deg);
-        }
-        .sk-fading-circle .sk-circle5 {
-            -webkit-transform: rotate(120deg);
-                -ms-transform: rotate(120deg);
-                    transform: rotate(120deg);
-        }
-        .sk-fading-circle .sk-circle6 {
-            -webkit-transform: rotate(150deg);
-                -ms-transform: rotate(150deg);
-                    transform: rotate(150deg);
-        }
-        .sk-fading-circle .sk-circle7 {
-            -webkit-transform: rotate(180deg);
-                -ms-transform: rotate(180deg);
-                    transform: rotate(180deg);
-        }
-        .sk-fading-circle .sk-circle8 {
-            -webkit-transform: rotate(210deg);
-                -ms-transform: rotate(210deg);
-                    transform: rotate(210deg);
-        }
-        .sk-fading-circle .sk-circle9 {
-            -webkit-transform: rotate(240deg);
-                -ms-transform: rotate(240deg);
-                    transform: rotate(240deg);
-        }
-        .sk-fading-circle .sk-circle10 {
-            -webkit-transform: rotate(270deg);
-                -ms-transform: rotate(270deg);
-                    transform: rotate(270deg);
-        }
-        .sk-fading-circle .sk-circle11 {
-            -webkit-transform: rotate(300deg);
-                -ms-transform: rotate(300deg);
-                    transform: rotate(300deg);
-        }
-        .sk-fading-circle .sk-circle12 {
-            -webkit-transform: rotate(330deg);
-                -ms-transform: rotate(330deg);
-                    transform: rotate(330deg);
-        }
-        .sk-fading-circle .sk-circle2:before {
-            -webkit-animation-delay: -1.1s;
-                    animation-delay: -1.1s;
-        }
-        .sk-fading-circle .sk-circle3:before {
-            -webkit-animation-delay: -1s;
-                    animation-delay: -1s;
-        }
-        .sk-fading-circle .sk-circle4:before {
-            -webkit-animation-delay: -0.9s;
-                    animation-delay: -0.9s;
-        }
-        .sk-fading-circle .sk-circle5:before {
-            -webkit-animation-delay: -0.8s;
-                    animation-delay: -0.8s;
-        }
-        .sk-fading-circle .sk-circle6:before {
-            -webkit-animation-delay: -0.7s;
-                    animation-delay: -0.7s;
-        }
-        .sk-fading-circle .sk-circle7:before {
-            -webkit-animation-delay: -0.6s;
-                    animation-delay: -0.6s;
-        }
-        .sk-fading-circle .sk-circle8:before {
-            -webkit-animation-delay: -0.5s;
-                    animation-delay: -0.5s;
-        }
-        .sk-fading-circle .sk-circle9:before {
-            -webkit-animation-delay: -0.4s;
-                    animation-delay: -0.4s;
-        }
-        .sk-fading-circle .sk-circle10:before {
-            -webkit-animation-delay: -0.3s;
-                    animation-delay: -0.3s;
-        }
-        .sk-fading-circle .sk-circle11:before {
-            -webkit-animation-delay: -0.2s;
-                    animation-delay: -0.2s;
-        }
-        .sk-fading-circle .sk-circle12:before {
-            -webkit-animation-delay: -0.1s;
-                    animation-delay: -0.1s;
-        }
-
-        @-webkit-keyframes sk-circleFadeDelay {
-            0%, 39%, 100% { opacity: 0; }
-            40% { opacity: 1; }
-        }
-
-        @keyframes sk-circleFadeDelay {
-            0%, 39%, 100% { opacity: 0; }
-            40% { opacity: 1; }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .body-loading {
-            position: relative;
-        }
-    </style>
 </head>
 
 <body>
-    <header id="header">
-        <div class="hamburger" id="toggle">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-        </div>
-        
-    </header>
+
     <div class="container" id="home">
         <div class="login-left">
             <div class="login-header">
-                <h1>Login</h1>
+                <h1>Đăng nhập</h1>
             </div>
             <form action="/signin" method="POST" id="loginForm" class="login-form" autocomplete="off">
                {% csrf_token %}
-                <div class="login-content">
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == "success" %}
+                            <div class="success-message" role="alert">
+                               <strong>{{ message }}</strong>
+                            </div>
+                        {% elif message.tags == "error" %}
+                            <div class="error-message" role="alert">
+                                <strong>{{ message }}</strong>
+                            </div>
+                        {% else %}
+                            <div class="info-message" role="alert">
+                                <strong>{{ message }}</strong>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                  <div class="form-item">
+                    <form id="roleForm" method="POST" action="{% url 'signin' %}">
+                      {% csrf_token %}
+                      <input type="hidden" id="is_superuser" name="is_superuser">
+                      <div class="select-menu">
+                          <div class="select-btn">
+                              <span class="sBtn-text">Chọn vai trò của bạn</span>
+                              <i class="fa-solid fa-circle-chevron-down fa-2xs" style="color: #06204b;"></i>
+                          </div>
+                          <ul class="options">
+                              <li class="option" data-value="student">
+                                  <i class="bx bxl-github" style="color: #171515;"></i>
+                                  <span class="option-text">Sinh viên</span>
+                              </li>
+                              <li class="option" data-value="teacher">
+                                  <i class="bx bxl-instagram-alt" style="color: #E1306C;"></i>
+                                  <span class="option-text">Giáo viên</span>
+                              </li>
+                          </ul>
+                      </div>
+                    
+                  </div>
+                  <div class="login-content">
                     <div class="form-item">
-                        <label for="email">Enter Email</label>
-                        <!-- <input type="email" name="email" placeholder="Email" required> -->
+                        <label for="email">Tên đăng nhập*</label>
                         <input type="text" class="form-control" id="username" name="username" placeholder="Enter Your Username" Required>
                     </div>
                     <div class="form-item">
-                        <label for="password">Enter Password</label>
+                        <label for="password">Mật khẩu*</label>
                         <label for="text"></label>
-                        <!-- <input type="password" name="password" placeholder="Password" required> -->
                         <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Enter Your Password" Required>
                     </div>
-                    <div class="form-item">
-                      <label for="last_name">Chức vụ</label>
-                      <select class="form-control" id="is_superuser" name="is_superuser" required>
-                        <option value="teacher">Giáo viên</option>
-                          <option value="student">Sinh viên</option>
-                      </select>
-                    </div>
-                    <div class="form-item">
-                        <div class="checkbox">
-                            <input type="checkbox" name="" id="rememberMeCheckbox" checked>
-                            <label for="rememberMeCheckbox" class="checkboxlabel">Remember Me</label>
-                        </div>
-                    </div>
-                    <div class="remember-forgot">
-                        <a href="#">Forgot password?</a>
-                    </div>      
-    
-                    <button type="submit" id="loginButton">LogIn</button>
+                    <button type="submit" id="loginButton">Đăng nhập</button>
+                </div>
+                <div class="login-footer">
+                  <a href="">
+                      Đổi mật khẩu
+                  </a>
+                  <a href="#">
+                      Quên mật khẩu
+                  </a>
                 </div>
                
             </form>
         </div>
+        <div class="login-right">
+          <img src="{%static 'assets/images/login.jfif' %}">
+        </div>
+        
     </div>
-
-    <div id="loadingSpinner" class="sk-fading-circle">
-        <div class="sk-circle1 sk-circle"></div>
-        <div class="sk-circle2 sk-circle"></div>
-        <div class="sk-circle3 sk-circle"></div>
-        <div class="sk-circle4 sk-circle"></div>
-        <div class="sk-circle5 sk-circle"></div>
-        <div class="sk-circle6 sk-circle"></div>
-        <div class="sk-circle7 sk-circle"></div>
-        <div class="sk-circle8 sk-circle"></div>
-        <div class="sk-circle9 sk-circle"></div>
-        <div class="sk-circle10 sk-circle"></div>
-        <div class="sk-circle11 sk-circle"></div>
-        <div class="sk-circle12 sk-circle"></div>
-    </div>
-
+    {% load static %}
+    <script src="{% static 'assets/js/signin.js' %}"></script>
     
 </body>
 
 </html>
+ -->
 
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'assets/css/signinn.css' %}"> 
+    <title>Sign in & Sign up Form</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="forms-container">
+        <div class="signin-signup">
+          <form action="/signin" method="post" class="sign-in-form" id="loginForm"  autocomplete="off">
+            <h2 class="title">Đăng nhập</h2>
+            {% csrf_token %}
+             {% if messages %}
+                 {% for message in messages %}
+                     {% if message.tags == "success" %}
+                         <div class="success-message" role="alert">
+                            <strong>{{ message }}</strong>
+                         </div>
+                     {% elif message.tags == "error" %}
+                         <div class="error-message" role="alert">
+                             <strong>{{ message }}</strong>
+                         </div>
+                     {% else %}
+                         <div class="info-message" role="alert">
+                             <strong>{{ message }}</strong>
+                         </div>
+                     {% endif %}
+                 {% endfor %}
+             {% endif %}
+               <div class="form-item">
+                 <form id="roleForm" method="POST" action="{% url 'signin' %}">
+                   {% csrf_token %}
+                   <input type="hidden" id="is_superuser" name="is_superuser">
+                   <div class="select-menu">
+                       <div class="select-btn">
+                           <span class="sBtn-text">Chọn vai trò của bạn</span>
+                           <i class="fa-solid fa-circle-chevron-down fa-2xs" style="color: #06204b;"></i>
+                       </div>
+                       <ul class="options">
+                           <li class="option" data-value="student">
+                               <i class="bx bxl-github" style="color: #171515;"></i>
+                               <span class="option-text">Sinh viên</span>
+                           </li>
+                           <li class="option" data-value="teacher">
+                               <i class="bx bxl-instagram-alt" style="color: #E1306C;"></i>
+                               <span class="option-text">Giáo viên</span>
+                           </li>
+                       </ul>
+                   </div>
+                 
+               </div>
+               <div class="login-content">
+                 <div class="form-item">
+                     <label for="email">Tên đăng nhập*</label>
+                     <input type="text" class="form-control" id="username" name="username" placeholder="Enter Your Username" Required>
+                 </div>
+                 <div class="form-item">
+                     <label for="password">Mật khẩu*</label>
+                     <label for="text"></label>
+                     <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Enter Your Password" Required>
+                 </div>
+                 <button type="submit" id="loginButton">Đăng nhập</button>
+             </div>
+          </form>
+
+          <form action="/signup" method="post" class="sign-up-form">
+            {% csrf_token %}
+            <h2 class="title">Sign up</h2>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" id="username" name="username" placeholder="User name" />
+            </div>
+            <div class="input-field">
+                <i class="fas fa-user"></i>
+                <input type="text" id="fname" name="fname" placeholder="First Name" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="email" name="email" placeholder="Email" />
+            </div>  
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="pass1" name="pass1" placeholder="Password" />
+            </div>
+            <div class="input-field">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="pass2" name="pass2" placeholder="Confirm Password" />
+            </div>
+            
+            <input type="submit" class="btn" value="Sign up" />
+            <p class="social-text">Or Sign up with social platforms</p>
+            <div class="social-media">
+              <a href="#" class="social-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <div class="content">
+            <h3>Welcome to website !</h3>
+            <p>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
+              ex ratione. Aliquid!
+            </p>
+            <button style="line-height: 0.9rem;" class="btn transparent" id="sign-up-btn">
+                <a href="/" style="text-decoration: none; color: white;">Trang chủ</a>
+            </button>
+          </div>
+          <img src="{%static 'assets/images/log.svg' %}" class="image" alt="" />
+        </div>
+        <div class="panel right-panel">
+          <div class="content">
+            <h3>One of us ?</h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+              laboriosam ad deleniti.
+            </p>
+            <button class="btn transparent" id="sign-in-btn">
+              Sign in
+            </button>
+          </div>
+          <img src="{%static 'assets/images/register.svg' %}" class="image" alt="" />
+        </div>
+      </div>
+    </div>
+
+    {% load static %}
+    <script src="{% static 'assets/js/signin.js' %}"></script>
+  </body>
+</html>

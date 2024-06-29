@@ -23,19 +23,19 @@ def home(request):
 
 def signin(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        pass1 = request.POST['pass1']
-        role = request.POST['is_superuser']
+        username = request.POST.get('username')
+        pass1 = request.POST.get('pass1')
+        role = request.POST.get('is_superuser')
 
         user = authenticate(username=username, password=pass1)
         
         if user is not None:
             if role == 'teacher':
                 login(request, user)
-                messages.success(request, "Logged In Successfully as Teacher!")
+                # messages.success(request, "Logged In Successfully as Teacher!")
                 return redirect('dashboard')
             else:
-                messages.error(request, "Invalid role for this user!")
+                messages.error(request, "Vai trò không hợp lệ đối với người dùng này")
                 return redirect('signin')
         elif role == 'student':
             try:
@@ -43,7 +43,7 @@ def signin(request):
                 if student.check_password(pass1):
                     request.session['student_id'] = student.student_id
                     request.session['student_name'] = student.name
-                    messages.success(request, "Logged In Successfully as Student!")
+                    # messages.success(request, "Logged In Successfully as Student!")
                     return redirect('home')
                 else:
                     messages.error(request, "Bad Credentials for Student!")
@@ -56,7 +56,7 @@ def signin(request):
 
 def signout(request):
     logout(request)
-    messages.success(request, "Logged Out Successfully!!")
+    messages.success(request, "Đăng xuất thành công")
     return redirect('signin')
 
 

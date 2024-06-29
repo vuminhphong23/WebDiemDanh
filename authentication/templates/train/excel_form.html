@@ -5,8 +5,9 @@
     <div class="submit-row" style="margin-bottom: 20px;">
         <form method="post" action="{% url 'embeddings' %}">
             {% csrf_token %}
-            <input type="submit" value="Completed" name="_make-unique">
+            <input type="submit" value="Excel export" name="_make-unique">
         </form>
+        
     </div>
+    
 {% endblock %}
-
