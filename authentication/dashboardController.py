@@ -73,13 +73,24 @@ def classroom_list_attendance(request):
 def classroom_attendance_detail(request, class_id):
     classroom = get_object_or_404(Classroom, pk=class_id)
     date_filter = request.GET.get('date')
+    
     if date_filter:
         sessions = classroom.attendance_sessions.filter(date=parse_date(date_filter))
     else:
         sessions = classroom.attendance_sessions.all()
+    
+    # Adding attendance data
+    session_data = []
+    total_students = classroom.students.count()
+    
+    for session in sessions:
+        attended_count = Attendance.objects.filter(session=session, attended=1).count()
+        attendance_percentage = (attended_count / total_students) * 100 if total_students > 0 else 0
+        session_data.append((session, attended_count, total_students, attendance_percentage))
+    
     return render(request, 'attendance/attendance_detail.html', {
         'classroom': classroom,
-        'sessions': sessions,
+        'sessions': session_data,  # Pass session data with attendance count and percentage
         'date_filter': date_filter,
     })
 

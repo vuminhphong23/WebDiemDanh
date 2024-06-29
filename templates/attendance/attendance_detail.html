@@ -180,11 +180,18 @@
               </tr>
             </thead>
             <tbody>
-              {% for session in sessions %}
+              {% for session, attended_count, total_students, attendance_percentage in sessions %}
               <tr>
                 <td>{{ session.date|date:"d/m/Y" }}</td>
                 <td>{{ session.start_time }}</td>
                 <td>{{ session.end_time }}</td>
+                <td>
+                  <div class="progress-container">
+                    <div class="progress-bar">
+                      {{ attended_count }}/{{ total_students }}
+                    </div>
+                  </div>
+                </td>
                 <td>
                   <a href="{% url 'session_attendance_detail' session.session_id %}"><button id="up">Xem chi tiết</button></a>
                 </td>
