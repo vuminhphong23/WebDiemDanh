@@ -1,181 +1,151 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'assets/css/singin.css' %}">
-    <title>Sign In</title>
-</head>
-<body>
-    <h3>Log In to your account!</h3>
-    <form method="post" action="/signin" class="mb-2">
-        {% csrf_token %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            <strong>Message:</strong> {{ message }}
-            
-        </div>
-        {% endfor %}
-        <div class="form-group">
-            <label for="username">Tên đăng nhập</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="Enter Your Username" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Mật khẩu</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Enter Your Password" required>
-        </div>
-        <div class="form-group">
-            <label for="last_name">Chức vụ</label>
-            <select class="form-control" id="last_name" name="last_name" required>
-                <option value="student">Sinh viên</option>
-                <option value="teacher">Giáo viên</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Đăng nhập</button>
-    </form>
-    
-</body>
-</html>
-
-
-
- -->
-
-
- <!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In</title>
-</head>
-<body>
-
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-        <strong>Message:</strong> {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-    </div>
-    {% endfor %}
-
-    <h3>Log In to your account!</h3>
-    <form method="post" action="/signin" class="mb-2">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="Enter Your Username" Required>
-        </div>
-        <div class="form-group">
-            <label for="pass1">Password</label>
-            <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Enter Your Password" Required>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Log In</button>
-    </form>
-</body>
-</html> -->
-
-
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Đăng nhập</title>
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/fontawesome-free/css/all.min.css' %}">
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/css/adminlte.min.css' %}">
-  
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'assets/css/signinn.css' %}"> 
+    <title>Sign in & Sign up Form</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="forms-container">
+        <div class="signin-signup">
+          <form action="/signin" method="post" class="sign-in-form" id="loginForm"  autocomplete="off">
+            <h2 class="title">Đăng nhập</h2>
+            {% csrf_token %}
+             {% if messages %}
+                 {% for message in messages %}
+                     {% if message.tags == "success" %}
+                         <div class="success-message" role="alert">
+                            <strong>{{ message }}</strong>
+                         </div>
+                     {% elif message.tags == "error" %}
+                         <div class="error-message" role="alert">
+                             <strong>{{ message }}</strong>
+                         </div>
+                     {% else %}
+                         <div class="info-message" role="alert">
+                             <strong>{{ message }}</strong>
+                         </div>
+                     {% endif %}
+                 {% endfor %}
+             {% endif %}
+               <div class="form-item">
+                 <form id="roleForm" method="POST" action="{% url 'signin' %}">
+                   {% csrf_token %}
+                   <input type="hidden" id="is_superuser" name="is_superuser">
+                   <div class="select-menu">
+                       <div class="select-btn">
+                           <span class="sBtn-text">Chọn vai trò của bạn</span>
+                           <i class="fa-solid fa-circle-chevron-down fa-2xs" style="color: #06204b;"></i>
+                       </div>
+                       <ul class="options">
+                           <li class="option" data-value="student">
+                               <i class="bx bxl-github" style="color: #171515;"></i>
+                               <span class="option-text">Sinh viên</span>
+                           </li>
+                           <li class="option" data-value="teacher">
+                               <i class="bx bxl-instagram-alt" style="color: #E1306C;"></i>
+                               <span class="option-text">Giáo viên</span>
+                           </li>
+                       </ul>
+                   </div>
+                 
+               </div>
+               <div class="login-content">
+                 <div class="form-item">
+                     <label for="email">Tên đăng nhập*</label>
+                     <input type="text" class="form-control" id="username" name="username" placeholder="Enter Your Username" Required>
+                 </div>
+                 <div class="form-item">
+                     <label for="password">Mật khẩu*</label>
+                     <label for="text"></label>
+                     <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Enter Your Password" Required>
+                 </div>
+                 <button type="submit" id="loginButton">Đăng nhập</button>
+             </div>
+          </form>
 
-</head>
-<body class="hold-transition login-page">
-<div class="login-box">
-  <div class="login-logo">
-    <a href="#"><b>Đăng nhập</b> tài khoản</a>
-  </div>
-  <!-- /.login-logo -->
-  <div class="card">
-    <div class="card-body login-card-body">
-      <p class="login-box-msg">Đăng nhập</p>
+          <form action="/signup" method="post" class="sign-up-form">
+            {% csrf_token %}
+            <h2 class="title">Sign up</h2>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" id="username" name="username" placeholder="User name" />
+            </div>
+            <div class="input-field">
+                <i class="fas fa-user"></i>
+                <input type="text" id="fname" name="fname" placeholder="First Name" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="email" name="email" placeholder="Email" />
+            </div>  
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="pass1" name="pass1" placeholder="Password" />
+            </div>
+            <div class="input-field">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="pass2" name="pass2" placeholder="Confirm Password" />
+            </div>
+            
+            <input type="submit" class="btn" value="Sign up" />
+            <p class="social-text">Or Sign up with social platforms</p>
+            <div class="social-media">
+              <a href="#" class="social-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
 
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            <strong>{{ message }}</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <div class="content">
+            <h3>Welcome to website !</h3>
+            <p>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
+              ex ratione. Aliquid!
+            </p>
+            <button style="line-height: 0.9rem;" class="btn transparent" id="sign-up-btn">
+                <a href="/" style="text-decoration: none; color: white;">Trang chủ</a>
             </button>
           </div>
-        {% endfor %}
-      {% endif %}
-
-      <form action="/signin" method="post">
-        {% csrf_token %}
-        <div class="input-group mb-3">
-          <!-- <input type="text" class="form-control" placeholder="Tên đăng nhập" name="name"> -->
-          <input type="text" class="form-control" id="username" name="username" placeholder="Enter Your Username" Required>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
+          <img src="{%static 'assets/images/log.svg' %}" class="image" alt="" />
         </div>
-        <div class="input-group mb-3">
-          <!-- <input type="password" class="form-control" placeholder="Mật khẩu" name="password"> -->
-          <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Enter Your Password" Required>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
+        <div class="panel right-panel">
+          <div class="content">
+            <h3>One of us ?</h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+              laboriosam ad deleniti.
+            </p>
+            <button class="btn transparent" id="sign-in-btn">
+              Sign in
+            </button>
           </div>
+          <img src="{%static 'assets/images/register.svg' %}" class="image" alt="" />
         </div>
-        <div class="form-group">
-            <label for="last_name">Chức vụ</label>
-            <select class="form-control" id="is_superuser" name="is_superuser" required>
-              <option value="teacher">Giáo viên</option>
-                <option value="student">Sinh viên</option>
-            </select>
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Ghi nhớ mật khẩu
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="social-auth-links text-center mb-3" style="margin: 0 auto;">
-            <button type="submit" class="btn btn-block btn-danger">Đăng nhập</button>
-          </div>
-          <!-- /.col -->
-        </div>
-      </form>
-
-      
-      <!-- /.social-auth-links -->
-
-      <p class="mb-1">
-        <a href="#">Quên mật khẩu</a>
-      </p>
+      </div>
     </div>
-    <!-- /.login-card-body -->
-  </div>
-</div>
-<!-- /.login-box -->
 
-<!-- <script src="../asset/plugins/jquery/jquery.min.js"></script>
-<script src="../asset/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="../asset/js/adminlte.min.js"></script> -->
-</body>
+    {% load static %}
+    <script src="{% static 'assets/js/signin.js' %}"></script>
+  </body>
 </html>

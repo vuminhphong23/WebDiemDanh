@@ -1,0 +1,12 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools %}
+    {{ block.super }}
+    <div class="submit-row" style="margin-bottom: 20px;">
+        <form method="post" action="{% url 'embeddings' %}">
+            {% csrf_token %}
+            <input type="submit" value="Completed" name="_make-unique">
+        </form>
+    </div>
+{% endblock %}
+

@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Dashboard</title>
+  <title>Chi tiết lớp học</title>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -32,8 +32,19 @@
   <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
   <script src="https://kit.fontawesome.com/dc2a236791.js" crossorigin="anonymous"></script>
   <style>
+    .content-wrapper{
+      height: 695px !important;
+    }
+    .main-sidebar {
+      background-color: #223771;
+    }
+
+    .m-0 {
+        color: #223771;
+    }
+
     .btn-danger {
-    padding: 5px 10px;
+    padding: 11px 15px;
     background-color: #dc3545;
     color: white;
     border: none;
@@ -69,7 +80,7 @@
     <div class="sidebar">
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="info">
-          <a href="#" class="d-block">{{ request.user.username }}</a>
+          <a href="#" class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
         </div>
       </div>
       <!-- Sidebar Menu -->
@@ -97,6 +108,12 @@
               <p>
                 Điểm danh
               </p>
+            </a>
+          </li>
+          <li class="nav-item mt-5">
+            <a style="margin-top: 320px;" href="/signout" class="nav-link">
+              <i class="fas fa-sign-out-alt"></i>
+              <p>Đăng xuất</p>
             </a>
           </li>
         </ul>
@@ -132,9 +149,9 @@
             <div class="search-container">
               <form method="get" action="#">
                 <input type="text" name="q" placeholder="Tìm kiếm sinh viên ..." value="{{ search_query }}">
-                <button type="submit">Tìm kiếm</button>
+                <button style="background-color: #223771" type="submit">Tìm kiếm</button>
                 {% if search_query %}
-                    <a href="{% url 'classroom_detail' classroom.class_id %}" class="btn btn-danger ml-2">Hủy tìm kiếm</a>
+                    <a href="{% url 'classroom_detail' classroom.class_id %}" class="btn btn-danger ml-2">Hủy</a>
                 {% endif %}
               </form>
             
@@ -158,14 +175,12 @@
                 <td>{{ student.name }}</td>
                 <td>{{ student.email }}</td>
                 <td>{{ student.phone }}</td>
-                <td>{{ student.date_birth }}</td>
-                <td>
-                  {% if student.icap %}
-                      Đã đăng ký
-                  {% else %}
-                      Chưa đăng ký
-                  {% endif %}
-                </td>
+                <td>{{ student.date_birth|date:"d/m/Y" }}</td>
+                {% if student.iCap %}
+                  <td style="color: blue;">Đã đăng ký</td>
+                {% else %}
+                  <td style="color: red;">Chưa đăng ký</td>
+                {% endif %}
 
                
             </tr>

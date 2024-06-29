@@ -1,4 +1,5 @@
-from django.http import HttpResponse
+import datetime
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 import pandas as pd
 from sympy import Max
@@ -72,13 +73,24 @@ def classroom_list_attendance(request):
 def classroom_attendance_detail(request, class_id):
     classroom = get_object_or_404(Classroom, pk=class_id)
     date_filter = request.GET.get('date')
+    
     if date_filter:
         sessions = classroom.attendance_sessions.filter(date=parse_date(date_filter))
     else:
         sessions = classroom.attendance_sessions.all()
+    
+    # Adding attendance data
+    session_data = []
+    total_students = classroom.students.count()
+    
+    for session in sessions:
+        attended_count = Attendance.objects.filter(session=session, attended=1).count()
+        attendance_percentage = (attended_count / total_students) * 100 if total_students > 0 else 0
+        session_data.append((session, attended_count, total_students, attendance_percentage))
+    
     return render(request, 'attendance/attendance_detail.html', {
         'classroom': classroom,
-        'sessions': sessions,
+        'sessions': session_data,  # Pass session data with attendance count and percentage
         'date_filter': date_filter,
     })
 
@@ -104,29 +116,82 @@ def session_attendance_detail(request, session_id):
         'attendance_details': attendance_details
     })
 
+@login_required
+def manual_attendance(request):
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        session_id = request.POST.get('session_id')
+        student = get_object_or_404(TblStudents, student_id=student_id)
+        session = get_object_or_404(AttendanceSession, session_id=session_id)
+        
+        now = datetime.datetime.now()
+        attendance, created = Attendance.objects.get_or_create(
+            student=student,
+            session=session,
+            defaults={'attended': True, 'date': now.date(), 'time': now.time()}
+        )
+        
+        if not created:
+            attendance.attended = True
+            attendance.date = now.date()
+            attendance.time = now.time()
+            attendance.save()
 
-# chưa dung
-def export_to_excel(request):
-    students = TblStudents.objects.all()
-    attendance = Attendance.objects.all()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+    return redirect('home')
+
+@login_required
+def delete_attendance(request):
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        session_id = request.POST.get('session_id')
+        student = get_object_or_404(TblStudents, student_id=student_id)
+        session = get_object_or_404(AttendanceSession, session_id=session_id)
+        
+        attendance = Attendance.objects.filter(student=student, session=session).first()
+        if attendance:
+            attendance.delete()
+
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+    return redirect('home')
+
+def export_to_excel(request, session_id):
+    session = get_object_or_404(AttendanceSession, session_id=session_id)
+    classroom = session.classroom
+    all_students = TblStudents.objects.filter(classrooms=classroom)
 
     data = []
-    for student in students:
-        student_attendance = attendance.filter(student=student)
-        for att in student_attendance:
+    for student in all_students:
+        attendance = Attendance.objects.filter(session=session, student=student).first()
+        if attendance:
+            attendance_status = 'Có mặt' if attendance.attended else 'Vắng'
             data.append({
-                'Mã sinh viên': student.student_id,
-                'Họ và tên': student.name,
+                'MSSV': student.student_id,
+                'Họ và tên': student.name,
                 'Email': student.email,
-                'Số điện thoại': student.phone,
-                'Ngày sinh': student.date_birth.strftime("%d-%m-%Y"),
-                'Ngày điểm danh': att.datetime.strftime("%d-%m-%Y"),
-                'Thời gian': att.datetime.strftime("%H:%M:%S"),
-                'Điểm danh': 'Có mặt' if att.attended else 'Đã điểm danh',
+                'Điểm danh': attendance_status,
+                'Ngày': attendance.date,
+                'Giờ': attendance.time,
+            })
+        else:
+            data.append({
+                'MSSV': student.student_id,
+                'Họ và tên': student.name,
+                'Email': student.email,
+                'Điểm danh': 'Vắng',
+                'Ngày': '',
+                'Giờ': '',
             })
 
     df = pd.DataFrame(data)
+
+    # Create an HttpResponse object with Excel file content
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=attendance.xlsx'
-    df.to_excel(response, index=False)
+    response['Content-Disposition'] = f'attachment; filename={classroom.class_name}_{session.date}_{session.start_time}_{session.end_time}.xlsx'
+
+    with pd.ExcelWriter(response, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Attendance')
+
     return response

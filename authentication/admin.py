@@ -1,5 +1,8 @@
+from pyexpat.errors import messages
 from django.contrib import admin
+from django.http import HttpResponse
 from .models import TblStudents, Classroom, AttendanceSession, Attendance
+from .train import main
 
 class TblStudentsInline(admin.TabularInline):
     model = TblStudents.classrooms.through
@@ -10,12 +13,17 @@ class AttendanceInline(admin.TabularInline):
     extra = 1
     raw_id_fields = ('session', 'student')
 
+def embeddings():
+    main()
+    # return "Images captured, saved, and embeddings created successfully."
+
 @admin.register(TblStudents)
 class TblStudentsAdmin(admin.ModelAdmin):
     list_display = ('student_id', 'name', 'email', 'phone', 'date_birth', 'iCap', 'display_classrooms')
     search_fields = ('name', 'email', 'phone')
     list_filter = ('date_birth', 'classrooms', 'iCap')
     exclude = ('password',)
+    change_list_template = "train/button_form.html"
 
     def display_classrooms(self, obj):
         return ", ".join([classroom.class_name for classroom in obj.classrooms.all()])
@@ -37,11 +45,14 @@ class ClassroomAdmin(admin.ModelAdmin):
     search_fields = ('class_name', 'teacher__username', 'subject')
     inlines = [TblStudentsInline]
     list_filter = ('teacher',)
+    
 
     def display_students(self, obj):
         return ", ".join([student.name for student in obj.students.all()])
 
     display_students.short_description = 'Students'
+
+
 
 class AttendanceSessionInline(admin.TabularInline):
     model = AttendanceSession

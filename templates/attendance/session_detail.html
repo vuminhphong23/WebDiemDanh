@@ -18,6 +18,40 @@
   <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/summernote/summernote-bs4.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+
+  <style>
+    .main-sidebar {
+      background-color: #223771;
+    }
+
+    .m-0 {
+        color: #223771;
+    }
+    #export, #new3{
+      padding: 5px 10px;
+      background-color: #223771;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+      margin-left: 65px;
+    }
+    #export:hover, #new3:hover {
+      background-color: #172650;
+    }
+
+    #export:focus, #new3:focus {
+      outline: none;
+    }
+    .content-wrapper{
+      height: 695px !important;
+    }
+
+  </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -32,7 +66,7 @@
     <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="info">
-              <a href="#" class="d-block">{{ request.user.username }}</a>
+              <a href="#" class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
             </div>
         </div>
       <!-- Sidebar Menu -->
@@ -57,9 +91,9 @@
             </a>
           </li>
           <li class="nav-item mt-5">
-            <a href="/signout" class="nav-link">
+            <a style="margin-top: 320px;" href="/signout" class="nav-link">
               <i class="fas fa-sign-out-alt"></i>
-              <p>SignOut</p>
+              <p>Đăng xuất</p>
             </a>
           </li>
         </ul>
@@ -75,8 +109,9 @@
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Danh sách điểm danh cho {{ session.classroom.class_name }} on {{ session.date }}</h1>
+          <div class="col-sm-12">
+            <h1 class="m-0">Danh sách điểm danh cho {{ session.classroom.class_name }} ngày {{ session.date|date:"d/m/Y" }}</h1>
+            <h1>({{session.start_time}} - {{session.end_time}})</h1>
           </div>
         </div>
       </div>
@@ -85,33 +120,65 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        <a href="{% url 'diemdanh' classroom_id=session.classroom.class_id session_id=session.session_id %}">
+          <button id="new3">Điểm danh</button>
+        </a>
+
+        <a href="{% url 'export_to_excel' session_id=session.session_id %}">
+            <button id="export">Xuất file Excel</button>
+        </a>
         <div class="container">
           <table class="content-table">
             <thead>
               <tr>
-                <th>Student Name</th>
+                <th>MSSV</th>
+                <th>Họ và tên</th>
                 <th>Email</th>
-                <th>Attended</th>
-                <th>Date</th>
-                <th>Time</th>
+                <th>Điểm danh</th>
+                <th>Ngày</th>
+                <th>Giờ</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {% for attendance in attendance_details %}
               <tr>
+                <td>{{ attendance.student.student_id }}</td>
                 <td>{{ attendance.student.name }}</td>
                 <td>{{ attendance.student.email }}</td>
-                <td>{{ attendance.attended }}</td>
-                <td>{{ attendance.date }}</td>
-                <td>{{ attendance.time }}</td>
+                {% if attendance.attended %}
+                    <td style="color: blue;">Có mặt</td>
+                {% else %}
+                    <td style="color: red;">Vắng mặt</td>
+                {% endif %}
+                <td>{{ attendance.date|date:"d/m/Y"|default:"" }}</td>
+                <td>{{ attendance.time|default:"" }}</td>
+                <td>
+                  <div style="display: flex; gap: 10px;">
+                    <form method="post" action="{% url 'manual_attendance' %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="student_id" value="{{ attendance.student.student_id }}">
+                      <input type="hidden" name="session_id" value="{{ session.session_id }}">
+                      <button type="submit" style="background: none; border: none; cursor: pointer;">
+                        <i class="fas fa-check-circle" style="color: #223771; font-size: 20px;"></i>
+                      </button>
+                    </form>
+                    <form method="post" action="{% url 'delete_attendance' %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="student_id" value="{{ attendance.student.student_id }}">
+                      <input type="hidden" name="session_id" value="{{ session.session_id }}">
+                      <button type="submit" style="background: none; border: none; cursor: pointer;">
+                        <i class="fas fa-trash" style="color: red; font-size: 20px;"></i>
+                      </button>
+                    </form>
+                  </div>
+                </td>
               </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
-        <a href="{% url 'diemdanh' classroom_id=session.classroom.class_id session_id=session.session_id %}">
-            <button id="new3">Điểm danh</button>
-        </a>
+        
       </div>
     </section>
   </div>

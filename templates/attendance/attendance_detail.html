@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Attendance Details</title>
+  <title>Lịch điểm danh</title>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -19,6 +19,17 @@
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
   <style>
+    .content-wrapper{
+      height: 695px !important;
+    }
+    .main-sidebar {
+      background-color: #223771;
+    }
+
+    .m-0 {
+        color: #223771;
+    }
+
     #filter-btn, #clear-btn {
       padding: 5px 10px;
       background-color: #009879;
@@ -32,8 +43,8 @@
       transition: background-color 0.3s ease;
     }
 
-    #filter-btn:hover, #clear-btn:hover {
-      background-color: #06b693;
+    #filter-btn:hover {
+      background-color: #172650;
     }
 
     #filter-btn:focus, #clear-btn:focus {
@@ -48,6 +59,42 @@
     #clear-btn:hover {
       background-color: #ff6659;
     }
+    
+    #up {
+      padding: 5px 10px;
+      background-color: #223771;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+
+    #up:hover {
+      background-color: #172650;
+    }
+
+    #up:focus {
+      outline: none;
+    }
+    input[type="date"] {
+      padding: 4px 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      width: 120px;
+      box-sizing: border-box;
+    }
+
+    /* Có thể áp dụng CSS cho trường input khi có focus */
+    input[type="date"]:focus {
+      outline: none; /* Loại bỏ đường viền focus mặc định */
+      border-color: #223771; /* Màu viền khi focus */
+    }
+
   </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -61,6 +108,11 @@
     </a>
     <!-- Sidebar -->
     <div class="sidebar">
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="info">
+          <a href="#" class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
+        </div>
+      </div>
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -83,9 +135,9 @@
             </a>
           </li>
           <li class="nav-item mt-5">
-            <a href="/signout" class="nav-link">
+            <a style="margin-top: 320px;" href="/signout" class="nav-link">
               <i class="fas fa-sign-out-alt"></i>
-              <p>SignOut</p>
+              <p>Đăng xuất</p>
             </a>
           </li>
         </ul>
@@ -113,27 +165,37 @@
       <div class="container-fluid">
         <div class="container">
           <form method="get" action="">
-            <label for="date">Filter by Date:</label>
+            <label for="date">Tìm kiếm:</label>
             <input type="date" id="date" name="date" value="{{ date_filter }}">
-            <button type="submit" id="filter-btn">Filter</button>
-            <a href="{% url 'classroom_attendance_detail' classroom.class_id %}"><button type="button" id="clear-btn">Clear Filter</button></a>
+            <button style="background-color: #223771" type="submit" id="filter-btn">Tìm</button>
+            <a href="{% url 'classroom_attendance_detail' classroom.class_id %}"><button type="button" id="clear-btn">Hủy</button></a>
           </form>
           <table class="content-table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Details</th>
+                <th>Ngày</th>
+                <th>Giờ bắt đầu</th>
+                <th>Giờ kết thúc</th>
+                <th></th>
+                <th>Chi tiết</th>
               </tr>
             </thead>
             <tbody>
-              {% for session in sessions %}
+              {% for session, attended_count, total_students, attendance_percentage in sessions %}
               <tr>
-                <td>{{ session.date }}</td>
+                <td>{{ session.date|date:"d/m/Y" }}</td>
                 <td>{{ session.start_time }}</td>
                 <td>{{ session.end_time }}</td>
-                <td><a href="{% url 'session_attendance_detail' session.session_id %}">View Details</a></td>
+                <td>
+                  <div class="progress-container">
+                    <div class="progress-bar">
+                      {{ attended_count }}/{{ total_students }}
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <a href="{% url 'session_attendance_detail' session.session_id %}"><button id="up">Xem chi tiết</button></a>
+                </td>
               </tr>
               {% endfor %}
             </tbody>

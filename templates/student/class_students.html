@@ -15,12 +15,14 @@
         }
 
         .content-student {
-            width: 80%;
+            width: 86%;
+            height: 93%;
             padding: 20px;
+            margin: 10px 0;
             box-sizing: border-box;
             background-color: #fff; /* Màu nền trắng */
             color: #000; /* Màu chữ chính */
-            border-radius: 8px; /* Bo góc container */
+            border-radius: 30px; /* Bo góc container */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng cho container */
         }
 
@@ -34,11 +36,19 @@
             margin-bottom: 8px; /* Khoảng cách dưới của đoạn văn bản */
         }
 
+        .sidebar-menu p a {
+            font-weight:400;
+        }
+
+        .header{
+            padding-top: 10px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
-            font-size: 18px;
+            font-size: 16px;
             text-align: left;
         }
 
@@ -46,8 +56,11 @@
             background-color: #3c5398;
             color: white;
             text-align: left;
-            font-weight: bold;
             transition: background-color 0.3s ease;
+        }
+
+        table thead tr th {
+            font-weight: 500;
         }
 
         table th, table td {
@@ -69,11 +82,12 @@
             background-color: #f1f1f1;
         }
 
+
         .details-button {
             background-color: #3c5398;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 7px  10px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
@@ -95,10 +109,9 @@
         <input type="text" placeholder="Tìm kiếm thông tin">
         <ul>
             {% if user.is_authenticated %}   
-                <li>{{fname}}</li>
                 <li><button type="submit"><a href="/dashboard">Trang chủ</a></button></li>
             {% elif request.session.student_id %}
-                <li><button type="submit"><a href="/profile">Trang cá nhân</a></button></li>
+                <li><button type="submit"><a href="/profile">Xin chào, {{request.session.student_name}} !</a></button></li>
             {% else %}
                 <li><button type="submit"><a href="/signin">Đăng nhập</a></button></li>
             {% endif %}
@@ -108,9 +121,9 @@
     <div class="container">
         <div class="sidebar-menu">
             <p><a href="/"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-house"></i>Trang chủ</a></p>
-            <p><a style="color: #f8843d;" href="/class_students"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-table"></i>Xem lớp</a></p>
-            <p><a href="/attendance_students"><i style="margin-right: 12px; color: #fff;" class="fa-regular fa-calendar-days"></i>Điểm danh</a></p>
-            <p><a href="/profile"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-user"></i>Profile</a></p>
+            <p><a style="color: #f8843d;" href="/class_students"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-table"></i> Xem lớp</a></p>
+            <p><a href="/attendance_students"><i style="margin-right: 12px; color: #fff;" class="fa-regular fa-calendar-days"></i> Điểm danh</a></p>
+            <p><a href="/profile"><i style="margin-right: 12px; color: #fff;" class="fa-solid fa-user"></i> Profile</a></p>
             <p><a href="/signout"><i style="margin-right: 12px; color: #fff; margin-top: 330px;" class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></p>
         </div>
         <div class="content-student">
@@ -131,7 +144,7 @@
                             <tr>
                                 <td>{{ classroom.class_id }}</td>
                                 <td>{{ classroom.class_name }}</td>
-                                <td>{{ classroom.teacher.username }}</td>
+                                <td>{{ classroom.teacher.first_name }} {{ classroom.teacher.last_name }}</td>
                                 <td>{{ classroom.subject }}</td>
                                 <td><a href="{% url 'class_detail' classroom.class_id %}" class="details-button">Xem chi tiết</a></td>
                             </tr>
