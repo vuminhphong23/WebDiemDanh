@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -46,7 +46,6 @@
                       <div class="select-menu">
                           <div class="select-btn">
                               <span class="sBtn-text">Chọn vai trò của bạn</span>
-                              <!-- <i class="bx bx-chevron-down"></i> -->
                               <i class="fa-solid fa-circle-chevron-down fa-2xs" style="color: #06204b;"></i>
                           </div>
                           <ul class="options">
@@ -96,4 +95,157 @@
 </body>
 
 </html>
+ -->
 
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'assets/css/signinn.css' %}"> 
+    <title>Sign in & Sign up Form</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="forms-container">
+        <div class="signin-signup">
+          <form action="/signin" method="post" class="sign-in-form" id="loginForm"  autocomplete="off">
+            <h2 class="title">Đăng nhập</h2>
+            {% csrf_token %}
+             {% if messages %}
+                 {% for message in messages %}
+                     {% if message.tags == "success" %}
+                         <div class="success-message" role="alert">
+                            <strong>{{ message }}</strong>
+                         </div>
+                     {% elif message.tags == "error" %}
+                         <div class="error-message" role="alert">
+                             <strong>{{ message }}</strong>
+                         </div>
+                     {% else %}
+                         <div class="info-message" role="alert">
+                             <strong>{{ message }}</strong>
+                         </div>
+                     {% endif %}
+                 {% endfor %}
+             {% endif %}
+               <div class="form-item">
+                 <form id="roleForm" method="POST" action="{% url 'signin' %}">
+                   {% csrf_token %}
+                   <input type="hidden" id="is_superuser" name="is_superuser">
+                   <div class="select-menu">
+                       <div class="select-btn">
+                           <span class="sBtn-text">Chọn vai trò của bạn</span>
+                           <i class="fa-solid fa-circle-chevron-down fa-2xs" style="color: #06204b;"></i>
+                       </div>
+                       <ul class="options">
+                           <li class="option" data-value="student">
+                               <i class="bx bxl-github" style="color: #171515;"></i>
+                               <span class="option-text">Sinh viên</span>
+                           </li>
+                           <li class="option" data-value="teacher">
+                               <i class="bx bxl-instagram-alt" style="color: #E1306C;"></i>
+                               <span class="option-text">Giáo viên</span>
+                           </li>
+                       </ul>
+                   </div>
+                 
+               </div>
+               <div class="login-content">
+                 <div class="form-item">
+                     <label for="email">Tên đăng nhập*</label>
+                     <input type="text" class="form-control" id="username" name="username" placeholder="Enter Your Username" Required>
+                 </div>
+                 <div class="form-item">
+                     <label for="password">Mật khẩu*</label>
+                     <label for="text"></label>
+                     <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Enter Your Password" Required>
+                 </div>
+                 <button type="submit" id="loginButton">Đăng nhập</button>
+             </div>
+          </form>
+
+          <form action="/signup" method="post" class="sign-up-form">
+            {% csrf_token %}
+            <h2 class="title">Sign up</h2>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" id="username" name="username" placeholder="User name" />
+            </div>
+            <div class="input-field">
+                <i class="fas fa-user"></i>
+                <input type="text" id="fname" name="fname" placeholder="First Name" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="email" name="email" placeholder="Email" />
+            </div>  
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="pass1" name="pass1" placeholder="Password" />
+            </div>
+            <div class="input-field">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="pass2" name="pass2" placeholder="Confirm Password" />
+            </div>
+            
+            <input type="submit" class="btn" value="Sign up" />
+            <p class="social-text">Or Sign up with social platforms</p>
+            <div class="social-media">
+              <a href="#" class="social-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <div class="content">
+            <h3>Welcome to website !</h3>
+            <p>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
+              ex ratione. Aliquid!
+            </p>
+            <button style="line-height: 0.9rem;" class="btn transparent" id="sign-up-btn">
+                <a href="/" style="text-decoration: none; color: white;">Trang chủ</a>
+            </button>
+          </div>
+          <img src="{%static 'assets/images/log.svg' %}" class="image" alt="" />
+        </div>
+        <div class="panel right-panel">
+          <div class="content">
+            <h3>One of us ?</h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+              laboriosam ad deleniti.
+            </p>
+            <button class="btn transparent" id="sign-in-btn">
+              Sign in
+            </button>
+          </div>
+          <img src="{%static 'assets/images/register.svg' %}" class="image" alt="" />
+        </div>
+      </div>
+    </div>
+
+    {% load static %}
+    <script src="{% static 'assets/js/signin.js' %}"></script>
+  </body>
+</html>
