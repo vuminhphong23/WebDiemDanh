@@ -430,7 +430,11 @@
                 });
             });
         
-            function captureImages() {
+            
+        });
+
+        function captureImages() {
+                console.log('Capture button clicked!');
                 fetch("{% url 'cappicture' student_id=student_id name=name %}", {
                     method: 'POST',
                     headers: {
@@ -449,7 +453,6 @@
                     console.error('Lỗi khi chụp ảnh:', error);
                 });
             }
-        });
     </script>
 </body>
 </html>
