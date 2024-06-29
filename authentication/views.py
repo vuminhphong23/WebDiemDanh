@@ -46,9 +46,9 @@ def signin(request):
                     # messages.success(request, "Logged In Successfully as Student!")
                     return redirect('home')
                 else:
-                    messages.error(request, "Bad Credentials for Student!")
+                    messages.error(request, "Đăng nhập không thành công!")
             except TblStudents.DoesNotExist:
-                messages.error(request, "Bad Credentials!")
+                messages.error(request, "Đăng nhập không thành công!")
             
             return redirect('signin')
     
