@@ -1,4 +1,5 @@
-from django.http import HttpResponse
+import datetime
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 import pandas as pd
 from sympy import Max
@@ -104,8 +105,47 @@ def session_attendance_detail(request, session_id):
         'attendance_details': attendance_details
     })
 
+@login_required
+def manual_attendance(request):
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        session_id = request.POST.get('session_id')
+        student = get_object_or_404(TblStudents, student_id=student_id)
+        session = get_object_or_404(AttendanceSession, session_id=session_id)
+        
+        now = datetime.datetime.now()
+        attendance, created = Attendance.objects.get_or_create(
+            student=student,
+            session=session,
+            defaults={'attended': True, 'date': now.date(), 'time': now.time()}
+        )
+        
+        if not created:
+            attendance.attended = True
+            attendance.date = now.date()
+            attendance.time = now.time()
+            attendance.save()
 
-# chưa dung
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+    return redirect('home')
+
+@login_required
+def delete_attendance(request):
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        session_id = request.POST.get('session_id')
+        student = get_object_or_404(TblStudents, student_id=student_id)
+        session = get_object_or_404(AttendanceSession, session_id=session_id)
+        
+        attendance = Attendance.objects.filter(student=student, session=session).first()
+        if attendance:
+            attendance.delete()
+
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+    return redirect('home')
+
 def export_to_excel(request, session_id):
     session = get_object_or_404(AttendanceSession, session_id=session_id)
     classroom = session.classroom

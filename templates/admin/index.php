@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Dashboard</title>
+    <title>Tổng quan</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -106,7 +106,7 @@
                             </a>
                         </li>
                         <li class="nav-item mt-5">
-                            <a href="/signout" class="nav-link">
+                            <a style="margin-top: 320px;" href="/signout" class="nav-link">
                                 <i class="fas fa-sign-out-alt"></i>
                                 <p>Đăng xuất</p>
                             </a>

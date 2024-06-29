@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Attendance Details</title>
+  <title>Lịch điểm danh</title>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -19,6 +19,9 @@
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
   <style>
+    .content-wrapper{
+      height: 695px !important;
+    }
     .main-sidebar {
       background-color: #223771;
     }
@@ -40,8 +43,8 @@
       transition: background-color 0.3s ease;
     }
 
-    #filter-btn:hover, #clear-btn:hover {
-      background-color: #06b693;
+    #filter-btn:hover {
+      background-color: #172650;
     }
 
     #filter-btn:focus, #clear-btn:focus {
@@ -59,7 +62,7 @@
     
     #up {
       padding: 5px 10px;
-      background-color: #009879;
+      background-color: #223771;
       color: white;
       border: none;
       border-radius: 5px;
@@ -71,13 +74,27 @@
     }
 
     #up:hover {
-      background-color: #06b693;
+      background-color: #172650;
     }
 
     #up:focus {
       outline: none;
     }
-  
+    input[type="date"] {
+      padding: 4px 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      width: 120px;
+      box-sizing: border-box;
+    }
+
+    /* Có thể áp dụng CSS cho trường input khi có focus */
+    input[type="date"]:focus {
+      outline: none; /* Loại bỏ đường viền focus mặc định */
+      border-color: #223771; /* Màu viền khi focus */
+    }
+
   </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -118,7 +135,7 @@
             </a>
           </li>
           <li class="nav-item mt-5">
-            <a href="/signout" class="nav-link">
+            <a style="margin-top: 320px;" href="/signout" class="nav-link">
               <i class="fas fa-sign-out-alt"></i>
               <p>Đăng xuất</p>
             </a>
