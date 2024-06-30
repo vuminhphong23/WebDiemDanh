@@ -22,6 +22,10 @@ class TblStudents(models.Model):
     password = models.CharField(max_length=128, default=make_password('abc@123'))
     classrooms = models.ManyToManyField(Classroom, related_name='students',blank=True)
 
+    class Meta:
+        verbose_name = "Student"
+        verbose_name_plural = "Students"
+
     def __str__(self):
         return self.name
 
