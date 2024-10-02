@@ -56,7 +56,7 @@ def get_attendance_record(session_id):
 def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
     cap = cv2.VideoCapture(0)
     detections = []  # Danh sách để lưu thông tin nhận diện
-    confidence_threshold = 80.0  # Ngưỡng tin cậy
+    confidence_threshold = 90.0  # Ngưỡng tin cậy
     attendance_message = ""
 
     # Lấy dữ liệu điểm danh từ cơ sở dữ liệu
@@ -80,9 +80,19 @@ def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
             class_probability = yhat_prob[0, class_index] * 100
             predict_name = out_encoder.inverse_transform(yhat_class)[0]
 
+            # Use "unknown" if confidence is below the threshold
+            if class_probability < confidence_threshold:
+                predict_name = "Unknown"
+            else:
+                predict_name = out_encoder.inverse_transform(yhat_class)[0]
+
             x1, y1, x2, y2 = boxes[i]
-            cv2.putText(frame, f'{predict_name} ({class_probability:.2f}%)', 
-                        (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            
+            if predict_name == "Unknown":
+                cv2.putText(frame, f'{predict_name}', (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+            else:
+                cv2.putText(frame, f'{predict_name} ({class_probability:.2f}%)', 
+                            (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
             # In thông báo nhận diện khuôn mặt
