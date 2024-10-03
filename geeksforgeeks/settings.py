@@ -93,12 +93,22 @@ WSGI_APPLICATION = 'geeksforgeeks.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'djangonew',
-        'NAME': 'django',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
+        # 'NAME': 'django',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': 'localhost',
         # "PORT": "10848",
+        
+        'NAME': 'defaultdb',
+        'USER': 'avnadmin',
+        'PASSWORD': 'AVNS_DwjiBOpm63RMCsq0Ujt',
+        'HOST': 'mysql-webdiemdanh-phongvu.g.aivencloud.com',
+        "PORT": "23417",
+        'OPTIONS': {
+            'ssl': {
+                'ca': 'ca.pem',  # Đường dẫn tới file CA certificate
+            },
+        },
     }
 }
 
