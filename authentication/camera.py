@@ -56,7 +56,7 @@ def get_attendance_record(session_id):
 def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
     cap = cv2.VideoCapture(0)
     detections = []  # Danh sách để lưu thông tin nhận diện
-    confidence_threshold = 90.0  # Ngưỡng tin cậy
+    confidence_threshold = 85.0  # Ngưỡng tin cậy
     attendance_message = ""
 
     # Lấy dữ liệu điểm danh từ cơ sở dữ liệu
