@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
