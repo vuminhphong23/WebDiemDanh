@@ -1,33 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Danh sách điểm danh</title>
   <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   {% load static %}
   <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/fontawesome-free/css/all.min.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <link rel="stylesheet"
+    href="{% static 'assets/css/Admin/admin/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+  <link rel="stylesheet"
+    href="{% static 'assets/css/Admin/admin/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/jqvmap/jqvmap.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/css/adminlte.min.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/daterangepicker/daterangepicker.css' %}">
+  <link rel="stylesheet"
+    href="{% static 'assets/css/Admin/admin/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+  <link rel="stylesheet"
+    href="{% static 'assets/css/Admin/admin/assets/plugins/daterangepicker/daterangepicker.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/Admin/admin/assets/plugins/summernote/summernote-bs4.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     .main-sidebar {
       background-color: #223771;
     }
 
     .m-0 {
-        color: #223771;
+      color: #223771;
     }
-    #export, #new3{
+
+    #export,
+    #new3 {
       padding: 5px 10px;
       background-color: #223771;
       color: white;
@@ -40,148 +48,208 @@
       transition: background-color 0.3s ease;
       margin-left: 65px;
     }
-    #export:hover, #new3:hover {
+
+    #export:hover,
+    #new3:hover {
       background-color: #172650;
     }
 
-    #export:focus, #new3:focus {
+    #export:focus,
+    #new3:focus {
       outline: none;
     }
-    .content-wrapper{
+
+    .content-wrapper {
       height: 695px !important;
     }
-
   </style>
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
-  <!-- Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="#" class="brand-link">
-      <img src="{% static 'assets/images/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">Teacher</span>
-    </a>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="info">
-              <a href="#" class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
-            </div>
-        </div>
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <a href="/dashboard" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>Tổng quan</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="/classroom_list" class="nav-link">
-              <i class="nav-icon fas fa-user"></i>
-              <p>Lớp học</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="/classroom_list_attendance" class="nav-link active">
-              <i class="nav-icon fas fa-book"></i>
-              <p>Điểm danh</p>
-            </a>
-          </li>
-          <li class="nav-item mt-5">
-            <a style="margin-top: 320px;" href="/signout" class="nav-link">
-              <i class="fas fa-sign-out-alt"></i>
-              <p>Đăng xuất</p>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-  </aside>
 
-  <!-- Content Wrapper -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-12">
-            <h1 class="m-0">Danh sách điểm danh cho {{ session.classroom.class_name }} ngày {{ session.date|date:"d/m/Y" }}</h1>
-            <h1>({{session.start_time}} - {{session.end_time}})</h1>
+<body class="hold-transition sidebar-mini layout-fixed">
+  <div class="wrapper">
+    <!-- Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Brand Logo -->
+      <a href="#" class="brand-link">
+        <img src="{% static 'assets/images/AdminLTELogo.png' %}" alt="AdminLTE Logo"
+          class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Teacher</span>
+      </a>
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="info">
+            <a href="#" class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
+          </div>
+        </div>
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item">
+              <a href="/dashboard" class="nav-link">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>Tổng quan</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/classroom_list" class="nav-link">
+                <i class="nav-icon fas fa-user"></i>
+                <p>Lớp học</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/classroom_list_attendance" class="nav-link active">
+                <i class="nav-icon fas fa-book"></i>
+                <p>Điểm danh</p>
+              </a>
+            </li>
+            <li class="nav-item mt-5">
+              <a style="margin-top: 320px;" href="/signout" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i>
+                <p>Đăng xuất</p>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-12">
+              <h1 class="m-0">Danh sách điểm danh cho {{ session.classroom.class_name }} ngày {{ session.date|date:"d/m/Y" }}</h1>
+              <h1>({{session.start_time}} - {{session.end_time}})</h1>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <a href="{% url 'diemdanh' classroom_id=session.classroom.class_id session_id=session.session_id %}">
-          <button id="new3">Điểm danh</button>
-        </a>
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <a href="{% url 'diemdanh' classroom_id=session.classroom.class_id session_id=session.session_id %}">
+            <button id="new3">Điểm danh</button>
+          </a>
 
-        <a href="{% url 'export_to_excel' session_id=session.session_id %}">
+          <a href="{% url 'export_to_excel' session_id=session.session_id %}">
             <button id="export">Xuất file Excel</button>
-        </a>
-        <div class="container">
-          <table class="content-table">
-            <thead>
-              <tr>
-                <th>MSSV</th>
-                <th>Họ và tên</th>
-                <th>Email</th>
-                <th>Điểm danh</th>
-                <th>Ngày</th>
-                <th>Giờ</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for attendance in attendance_details %}
-              <tr>
-                <td>{{ attendance.student.student_id }}</td>
-                <td>{{ attendance.student.name }}</td>
-                <td>{{ attendance.student.email }}</td>
-                {% if attendance.attended %}
-                    <td style="color: blue;">Có mặt</td>
-                {% else %}
-                    <td style="color: red;">Vắng mặt</td>
-                {% endif %}
-                <td>{{ attendance.date|date:"d/m/Y"|default:"" }}</td>
-                <td>{{ attendance.time|default:"" }}</td>
-                <td>
-                  <div style="display: flex; gap: 10px;">
-                    <form method="post" action="{% url 'manual_attendance' %}">
-                      {% csrf_token %}
-                      <input type="hidden" name="student_id" value="{{ attendance.student.student_id }}">
-                      <input type="hidden" name="session_id" value="{{ session.session_id }}">
-                      <button type="submit" style="background: none; border: none; cursor: pointer;">
-                        <i class="fas fa-check-circle" style="color: #223771; font-size: 20px;"></i>
+          </a>
+          <div class="container">
+            <table class="content-table">
+              <thead>
+                <tr>
+                  <th>MSSV</th>
+                  <th>Họ và tên</th>
+                  <th>Email</th>
+                  <th>Điểm danh</th>
+                  <th>Ngày</th>
+                  <th>Giờ</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for attendance in attendance_details %}
+                <tr>
+                  <td>{{ attendance.student.student_id }}</td>
+                  <td>{{ attendance.student.name }}</td>
+                  <td>{{ attendance.student.email }}</td>
+                  {% if attendance.attended %}
+                  <td style="color: blue;">Có mặt</td>
+                  {% else %}
+                  <td style="color: red;">Vắng mặt</td>
+                  {% endif %}
+                  <td>{{ attendance.date|date:"d/m/Y"|default:"" }}</td>
+                  <td>{{ attendance.time|default:"" }}</td>
+                  <td>
+                    <div style="display: flex; gap: 10px;">
+                      <form method="post" action="{% url 'manual_attendance' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="student_id" value="{{ attendance.student.student_id }}">
+                        <input type="hidden" name="session_id" value="{{ session.session_id }}">
+                        <button type="submit" style="background: none; border: none; cursor: pointer;">
+                          <i class="fas fa-check-circle" style="color: #223771; font-size: 20px;"></i>
+                        </button>
+                      </form>
+                      <form method="post" action="{% url 'delete_attendance' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="student_id" value="{{ attendance.student.student_id }}">
+                        <input type="hidden" name="session_id" value="{{ session.session_id }}">
+                        <button type="submit" style="background: none; border: none; cursor: pointer;">
+                          <i class="fas fa-trash" style="color: red; font-size: 20px;"></i>
+                        </button>
+                      </form>
+                      <button onclick="loadStudentAttendance(this)" data-session-id="{{ session.session_id }}"
+                        data-student-id="{{ attendance.student.student_id }}"
+                        data-student-name="{{ attendance.student.name }}" data-date='{{ attendance.date|date:"d/m/Y" }}'
+                        style="background: none; border: none; cursor: pointer;">
+                        <i class="fas fa-eye" style="color: #223771; font-size: 20px;"></i>
                       </button>
-                    </form>
-                    <form method="post" action="{% url 'delete_attendance' %}">
-                      {% csrf_token %}
-                      <input type="hidden" name="student_id" value="{{ attendance.student.student_id }}">
-                      <input type="hidden" name="session_id" value="{{ session.session_id }}">
-                      <button type="submit" style="background: none; border: none; cursor: pointer;">
-                        <i class="fas fa-trash" style="color: red; font-size: 20px;"></i>
-                      </button>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+
+                      <!-- Modal để hiển thị ảnh -->
+                      <div id="imageModal"
+                        style="display:none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);">
+                        <div
+                          style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px; text-align: center;">
+                          <span style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;"
+                            onclick="closeImageModal()">&times;</span>
+                          <img id="modalImage" alt="Ảnh" style="max-width: 100%; height: auto;">
+                        </div>
+                      </div>
+
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
         </div>
-        
-      </div>
-    </section>
+      </section>
+    </div>
   </div>
-</div>
+  <script>
+    function loadStudentAttendance(button) {
+      var sessionId = button.getAttribute('data-session-id');
+      var studentId = button.getAttribute('data-student-id');
+      var studentName = button.getAttribute('data-student-name');
+      var date = button.getAttribute('data-date');
+
+      $.ajax({
+        url: `http://127.0.0.1:8000/ajax/get_attendance_results`,  // Đảm bảo URL đúng
+        type: 'GET',
+        data: {
+          student_id: studentId,
+          student_name: studentName,
+          date: date
+        },
+        success: function (response) {
+          if (response.image_url) {  // Kiểm tra URL ảnh
+            console.log("Image URL found:", response.image_url);
+            document.getElementById('modalImage').src = response.image_url;  // Gán URL ảnh vào thẻ img
+            document.getElementById('imageModal').style.display = 'block';  // Hiển thị modal
+          } else {
+            alert('Image not found!');
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error:", xhr.responseText);
+          alert('Error loading attendance information!');
+        }
+      });
+    }
+
+    function closeImageModal() {
+      document.getElementById('imageModal').style.display = 'none';  // Đóng modal
+    }
+  </script>
+
 </body>
+
 </html>

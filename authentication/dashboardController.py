@@ -6,15 +6,24 @@ from sympy import Max
 from .models import Attendance, TblStudents, Classroom, AttendanceSession
 from .models import TblStudents
 from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Q
+from django.db.models import Q,Count
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_date
 from django.contrib.auth.models import User
+from urllib.parse import unquote
+from django.http import JsonResponse
+import os
+import tempfile
+from firebase_admin import storage
 
+
+from django.shortcuts import render, redirect
+from .models import TblStudents, Classroom, User, AttendanceSession
 
 def dashboard(request):
     student_id = request.session.get('student_id')
     student_name = request.session.get('student_name')
+    
     if student_id and student_name:
         return redirect('home')
     
@@ -23,9 +32,55 @@ def dashboard(request):
         total_students = TblStudents.objects.count()
         total_class = Classroom.objects.count()
         total_teachers = User.objects.filter(is_superuser=False).count()
-        return render(request, 'admin/index.php', {'total_students': total_students, 'total_class': total_class, 'total_teachers': total_teachers})
-    
+
+        # Lấy danh sách các lớp giáo viên đang dạy
+        teacher_classes = Classroom.objects.filter(teacher=user)
+
+        # Tính tổng số buổi học và buổi học đã học cho mỗi lớp
+        for classroom in teacher_classes:
+            total_sessions = AttendanceSession.objects.filter(classroom=classroom).count()
+            attended_sessions = AttendanceSession.objects.filter(
+                classroom=classroom,
+                attendances__attended=True  # Buổi học có ít nhất 1 sinh viên điểm danh
+            ).distinct().count()
+
+            # Gắn thêm dữ liệu vào từng classroom
+            classroom.total_sessions = total_sessions
+            classroom.attended_sessions = attended_sessions
+
+            # Tính tỷ lệ vắng mặt cho tất cả sinh viên trong lớp
+            absent_data = []  # Khởi tạo absent_data cho mỗi lớp
+            if total_sessions > 0:  # Chỉ tính nếu có buổi học nào
+                # Lấy danh sách sinh viên trong lớp hiện tại
+                students = classroom.students.annotate(
+                    attended_count=Count('attendances', filter=Q(attendances__attended=True)),
+                )
+                
+                for student in students:
+                    print(f'Student: {student.name}, Attended: {student.attended_count}, Total: {attended_sessions}')
+                    absent_rate = (attended_sessions - student.attended_count) / total_sessions
+                    print(f'Absent Rate: {absent_rate}')
+                    absent_data.append({
+                        'student_name': student.name,
+                        'absent_rate': round(absent_rate * 100, 2),
+                    })
+
+            # Gắn dữ liệu vắng mặt vào lớp
+            classroom.absent_data = absent_data
+        
+        return render(request, 'admin/index.php', {
+            'total_students': total_students,
+            'total_class': total_class,
+            'total_teachers': total_teachers,
+            'teacher_classes': teacher_classes, 
+            'absent_data': absent_data  
+        })
+
     return redirect('home')
+
+
+
+
 
 @login_required
 def classroom_list(request):
@@ -194,4 +249,63 @@ def export_to_excel(request, session_id):
     with pd.ExcelWriter(response, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Attendance')
 
+    return response
+
+# Hàm gọi ảnh từ Firebase Storage
+def load_image(image_path):
+    try:
+        bucket = storage.bucket()
+        blob = bucket.blob(image_path)
+        filename = image_path.split('/')[-1]
+        temp_image_path = os.path.join(tempfile.gettempdir(), filename)
+        blob.download_to_filename(temp_image_path)
+        #print(f"Đã tải thành công ảnh xuống {temp_image_path}")
+        return temp_image_path
+    except FileNotFoundError:
+        print(f"Không tìm thấy file: {image_path}")
+
+# Hàm xử lý logic lấy ảnh và trả về JsonResponse
+def session_attendance(student_id, student_name, date):
+    formatted_date = process_date(date)
+    image_path = f'result-attendance/{student_id}_{student_name}_{formatted_date}.jpg'
+    #print(f"Đang kiểm tra đường dẫn ảnh: {image_path}")
+    
+    temp_image_path = load_image(image_path)
+    
+    if temp_image_path:
+        # Tạo URL tạm thời để truy cập ảnh từ Firebase
+        bucket = storage.bucket()
+        blob = bucket.blob(image_path)
+        image_url = blob.generate_signed_url(expiration=datetime.timedelta(minutes=15))
+        return JsonResponse({'image_url': image_url})
+    else:
+        return JsonResponse({'error': 'Không tìm thấy ảnh'}, status=404)
+
+#Xử lý dữ liệu ngày khi trả về
+def process_date(encoded_date):
+    try:
+        # Giải mã chuỗi URL
+        decoded_date = unquote(encoded_date)
+        # Chuyển đổi định dạng từ dd/mm/yyyy sang datetime
+        date_obj = datetime.datetime.strptime(decoded_date, '%d/%m/%Y')
+        # Định dạng lại thành yyyyMMdd
+        formatted_date = date_obj.strftime('%Y%m%d')
+        return formatted_date
+    except ValueError as e:
+        #print(f"Error processing date: {e}")
+        return None  # Hoặc trả về một giá trị mặc định khác
+
+# Hàm xử lý logic lấy ảnh dựa trên student_id, student_name và date
+def student_attendance_detail(request):
+    student_id = request.GET.get('student_id')
+    student_name = request.GET.get('student_name')
+    date = request.GET.get('date')
+
+    #print(f"Received student_id: {student_id}, student_name: {student_name}, date: {date}")
+
+    if not student_id or not student_name or not date:
+        return JsonResponse({'error': 'Thiếu thông tin student_id, student_name hoặc date'}, status=400)
+
+    # Tiến hành kiểm tra ảnh
+    response = session_attendance(student_id, student_name, date)
     return response

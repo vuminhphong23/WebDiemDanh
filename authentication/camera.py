@@ -167,15 +167,16 @@ from numpy import expand_dims
 import face_recognition
 from keras_facenet import FaceNet
 import pickle
-import threading
-import json
-import os  # Thêm import này để xử lý tệp
+import threading 
 from .models import AttendanceSession, TblStudents, Attendance
 from .pnhLCD1602 import LCD1602
+from firebase_admin import storage
 
 # Load FaceNet model for embedding extraction
 embedder = FaceNet()
 facenet_model = embedder.model
+
+redirect_flag = False
 
 # Extract face embeddings from a given frame
 def get_face_embeddings(frame):
@@ -209,8 +210,15 @@ def get_attendance_record(session_id):
         attendance_record[student_id].add(date_attended)
     return attendance_record
 
-# Capture video from the webcam and make predictions
-def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
+def upload_to_firebase(image, folder, image_name):
+    bucket = storage.bucket()
+    blob = bucket.blob(f'{folder}/{image_name}')
+    _, img_encoded = cv2.imencode('.jpg', image)
+    blob.upload_from_string(img_encoded.tobytes(), content_type='image/jpeg')
+    print(f'Uploaded {image_name} to {folder}.')
+    
+
+def realtime_face_recognition(model, out_encoder, classroom_id, session_id):    
     cap = cv2.VideoCapture(0)
     confidence_threshold = 80.0  # Ngưỡng xác suất để điểm danh
     attendance_message = ""
@@ -218,13 +226,12 @@ def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
     session = get_object_or_404(AttendanceSession, session_id=session_id)
 
     frame_count = 0  # Đếm số khung hình để giảm tần suất nhận diện
-    lcd_data = []  # Danh sách lưu dữ liệu điểm danh
 
     while True:
+        
         ret, frame = cap.read()
         if not ret:
             break
-
         frame = cv2.flip(frame, 1)
 
         # Chỉ xử lý mỗi 7 khung hình để giảm tải
@@ -243,17 +250,23 @@ def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
             predict_name = out_encoder.inverse_transform(yhat_class)[0]
 
             x1, y1, x2, y2 = boxes[i]
-            cv2.putText(frame, f'{predict_name} ({class_probability:.2f}%)', 
-                        (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-
-            stripped_name = predict_name.split('_', 1)[-1]
-            print(f"Detected: {stripped_name} with {class_probability:.2f}% confidence")
+            
+            if class_probability < confidence_threshold:
+                predict_name = "Unknown"  # Gán nhãn "Unknown"
+                # Vẽ chữ "Unknown" với màu đỏ
+                cv2.putText(frame, predict_name, 
+                            (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 255), 2)  # Khung màu đỏ
+            else:
+                stripped_name = predict_name.split('_', 1)[-1]
+                print(f"Detected: {stripped_name} with {class_probability:.2f}% confidence")
+                # Vẽ tên và xác suất với màu xanh
+                cv2.putText(frame, f'{stripped_name} ({class_probability:.2f}%)', 
+                            (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
             # Chỉ thực hiện điểm danh khi xác suất đủ lớn
             if class_probability >= confidence_threshold:
-                lcd = LCD1602()
-                
                 try:
                     student = TblStudents.objects.get(name=stripped_name)
                     print(f"Marking attendance for {stripped_name}")
@@ -261,11 +274,7 @@ def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
                     now = timezone.localtime()
                     today = now.date()
                     current_time = now.time()
-                    
-                    # Hiển thị tên và xác suất lên LCD
-                    lcd.clear()  # Xóa nội dung cũ
-                    lcd.write_string(f"{stripped_name}")  # Hiển thị tên ở dòng 1
-                    lcd.write_string(f"{class_probability:.2f}%")  # Hiển thị phần trăm ở dòng 2
+                    formatted_date = today.strftime('%Y%m%d')
 
                     if today != session.date:
                         attendance_message = f"{student.student_id} - {student.name} is not on the session date"
@@ -285,6 +294,17 @@ def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
                             continue
                     else:
                         attendance_record[student.student_id] = set()
+                        
+                        upload_to_firebase(
+                            frame,  
+                            f'result-attendance', 
+                            f'{student.student_id}_{student.name}_{formatted_date}.jpg'
+                        )
+                        lcd = LCD1602()
+                        # Hiển thị tên và xác suất lên LCD
+                        lcd.clear()  # Xóa nội dung cũ
+                        lcd.write_string(f"{stripped_name}")  # Hiển thị tên ở dòng 1
+                        lcd.write_string(f"{class_probability:.2f}%")  # Hiển thị phần trăm ở dòng 2
 
                     # Ghi nhận điểm danh
                     attendance_instance, created = Attendance.objects.get_or_create(
@@ -302,48 +322,12 @@ def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
                     attendance_message = f"{student.student_id} - {student.name} Attendance successfully"
                     print(attendance_message)
 
-                    # Lưu dữ liệu vào lcd_data
-                    lcd_data.append({
-                        'student_id': student.student_id,
-                        'student_name': student.name,
-                        'date': str(today),
-                        'time': str(current_time),
-                        'classroom_id': classroom_id,
-                        'session_id': session_id,
-                        
-                        'confidence': class_probability
-                    })
 
                 except TblStudents.DoesNotExist:
                     print(f"Student {stripped_name} not found in database")
 
         if attendance_message:
             cv2.putText(frame, attendance_message, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-
-        # Ghi dữ liệu lcd_data vào file JSON chỉ khi có dữ liệu mới
-        if lcd_data:
-            json_filename = f'data_json/attendance_data_N0{classroom_id}_{today}.json'
-
-            # Kiểm tra xem tệp JSON đã tồn tại hay chưa
-            if not os.path.exists(json_filename):
-                # Nếu không, tạo tệp mới và khởi tạo dữ liệu
-                with open(json_filename, 'w') as json_file:
-                    json.dump([], json_file)  # Khởi tạo với danh sách rỗng
-
-            try:
-                # Đọc dữ liệu cũ nếu có
-                with open(json_filename, 'r') as json_file:
-                    existing_data = json.load(json_file)
-
-                # Kết hợp dữ liệu cũ với dữ liệu mới
-                existing_data.extend(lcd_data)
-
-                # Ghi dữ liệu mới vào tệp JSON
-                with open(json_filename, 'w') as json_file:
-                    json.dump(existing_data, json_file, indent=4)
-                print(f"Attendance data saved to {json_filename}")
-            except Exception as e:
-                print(f"Error saving JSON data: {e}")
 
         cv2.imshow('Video', frame)
 
@@ -368,6 +352,7 @@ def diemdanh(request, classroom_id, session_id):
     recognition_thread.start()
 
     return redirect('session_attendance_detail', session_id=session_id)
+
 
 
 

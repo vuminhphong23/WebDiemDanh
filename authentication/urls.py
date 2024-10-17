@@ -23,6 +23,7 @@ urlpatterns = [
     path('classroom/<int:class_id>/attendance/', dashboardController.classroom_attendance_detail, name='classroom_attendance_detail'),
     path('session/<int:session_id>/attendance/', dashboardController.session_attendance_detail, name='session_attendance_detail'),
     path('diemdanh/<int:classroom_id>/<int:session_id>/', camera.diemdanh, name='diemdanh'),
+    path('ajax/get_attendance_results', dashboardController.student_attendance_detail, name='student_attendance_detail'),
     path('manual_attendance/', dashboardController.manual_attendance, name='manual_attendance'),
     path('delete_attendance/', dashboardController.delete_attendance, name='delete_attendance'),
     path('export_attendance/<int:session_id>/', dashboardController.export_to_excel, name='export_to_excel'),
