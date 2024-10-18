@@ -186,7 +186,10 @@
                       </form>
                       <button onclick="loadStudentAttendance(this)" data-session-id="{{ session.session_id }}"
                         data-student-id="{{ attendance.student.student_id }}"
-                        data-student-name="{{ attendance.student.name }}" data-date='{{ attendance.date|date:"d/m/Y" }}'
+                        data-student-name="{{ attendance.student.name }}" 
+                        data-date='{{ attendance.date|date:"d/m/Y" }}'
+                        data-time='{{ attendance.time|time:"H:i" }}'
+                        data-class="{{ session.classroom.class_name }}"
                         style="background: none; border: none; cursor: pointer;">
                         <i class="fas fa-eye" style="color: #223771; font-size: 20px;"></i>
                       </button>
@@ -220,6 +223,8 @@
       var studentId = button.getAttribute('data-student-id');
       var studentName = button.getAttribute('data-student-name');
       var date = button.getAttribute('data-date');
+      var time = button.getAttribute('data-time');
+      var class_name = button.getAttribute('data-class');
 
       $.ajax({
         url: `http://127.0.0.1:8000/ajax/get_attendance_results`,  // Đảm bảo URL đúng
@@ -227,7 +232,9 @@
         data: {
           student_id: studentId,
           student_name: studentName,
-          date: date
+          date: date,
+          class_name: class_name,
+          time: time,
         },
         success: function (response) {
           if (response.image_url) {  // Kiểm tra URL ảnh

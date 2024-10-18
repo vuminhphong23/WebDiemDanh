@@ -23,64 +23,65 @@ from .models import TblStudents, Classroom, User, AttendanceSession
 def dashboard(request):
     student_id = request.session.get('student_id')
     student_name = request.session.get('student_name')
-    
+
     if student_id and student_name:
         return redirect('home')
-    
+
     user = request.user
-    if user.is_authenticated:  
+    if user.is_authenticated:
         total_students = TblStudents.objects.count()
         total_class = Classroom.objects.count()
         total_teachers = User.objects.filter(is_superuser=False).count()
 
+        print(f'Total students: {total_students}, Total classes: {total_class}, Total teachers: {total_teachers}')
+
         # Lấy danh sách các lớp giáo viên đang dạy
         teacher_classes = Classroom.objects.filter(teacher=user)
+        print(f'Teacher {user.username} is teaching {teacher_classes.count()} classes.')
 
-        # Tính tổng số buổi học và buổi học đã học cho mỗi lớp
+        # Tạo dictionary để lưu dữ liệu absent_data cho từng lớp
+        class_absent_data = {}
+
         for classroom in teacher_classes:
             total_sessions = AttendanceSession.objects.filter(classroom=classroom).count()
             attended_sessions = AttendanceSession.objects.filter(
                 classroom=classroom,
-                attendances__attended=True  # Buổi học có ít nhất 1 sinh viên điểm danh
+                attendances__attended=True
             ).distinct().count()
 
-            # Gắn thêm dữ liệu vào từng classroom
             classroom.total_sessions = total_sessions
             classroom.attended_sessions = attended_sessions
 
-            # Tính tỷ lệ vắng mặt cho tất cả sinh viên trong lớp
-            absent_data = []  # Khởi tạo absent_data cho mỗi lớp
-            if total_sessions > 0:  # Chỉ tính nếu có buổi học nào
-                # Lấy danh sách sinh viên trong lớp hiện tại
+            absent_data = []
+            if total_sessions > 0:  
+                # Lấy danh sách sinh viên theo từng lớp
                 students = classroom.students.annotate(
-                    attended_count=Count('attendances', filter=Q(attendances__attended=True)),
+                    attended_count=Count('attendances', filter=Q(attendances__attended=True, attendances__session__classroom=classroom)),
                 )
-                
+
                 for student in students:
-                    print(f'Student: {student.name}, Attended: {student.attended_count}, Total: {attended_sessions}')
                     absent_rate = (attended_sessions - student.attended_count) / total_sessions
-                    print(f'Absent Rate: {absent_rate}')
                     absent_data.append({
                         'student_name': student.name,
                         'absent_rate': round(absent_rate * 100, 2),
                     })
 
-            # Gắn dữ liệu vắng mặt vào lớp
-            classroom.absent_data = absent_data
-        
+                    print(f"Student {student.name} attended {student.attended_count} out of {total_sessions} sessions in classroom {classroom.class_name}. Absent rate: {absent_rate * 100:.2f}%")
+
+            # Gắn dữ liệu vắng mặt vào dictionary theo từng lớp
+            class_absent_data[classroom.class_id] = absent_data
+
+        print(f'Class absent data: {class_absent_data}')
+
         return render(request, 'admin/index.php', {
             'total_students': total_students,
             'total_class': total_class,
             'total_teachers': total_teachers,
-            'teacher_classes': teacher_classes, 
-            'absent_data': absent_data  
+            'teacher_classes': teacher_classes,
+            'class_absent_data': class_absent_data,  # Dữ liệu vắng mặt cho các lớp
         })
 
     return redirect('home')
-
-
-
-
 
 @login_required
 def classroom_list(request):
@@ -265,9 +266,9 @@ def load_image(image_path):
         print(f"Không tìm thấy file: {image_path}")
 
 # Hàm xử lý logic lấy ảnh và trả về JsonResponse
-def session_attendance(student_id, student_name, date):
+def session_attendance(class_name, time, date, student_id, student_name):
     formatted_date = process_date(date)
-    image_path = f'result-attendance/{student_id}_{student_name}_{formatted_date}.jpg'
+    image_path = f'result-attendance/{class_name}_{time}_{formatted_date}_{student_id}_{student_name}.jpg'
     #print(f"Đang kiểm tra đường dẫn ảnh: {image_path}")
     
     temp_image_path = load_image(image_path)
@@ -300,12 +301,14 @@ def student_attendance_detail(request):
     student_id = request.GET.get('student_id')
     student_name = request.GET.get('student_name')
     date = request.GET.get('date')
+    time= request.GET.get('time')
+    class_name = request.GET.get('class_name')
 
-    #print(f"Received student_id: {student_id}, student_name: {student_name}, date: {date}")
+    # print(f"Received student_id: {student_id}, student_name: {student_name}, date: {date}")
 
     if not student_id or not student_name or not date:
         return JsonResponse({'error': 'Thiếu thông tin student_id, student_name hoặc date'}, status=400)
 
     # Tiến hành kiểm tra ảnh
-    response = session_attendance(student_id, student_name, date)
+    response = session_attendance(class_name, time, date, student_id, student_name)
     return response

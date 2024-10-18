@@ -258,15 +258,15 @@
                     datasets: [
                         {
                             label: "Đã học",
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',  // Màu xanh cho buổi đã học
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
                             borderColor: 'rgba(75, 192, 192, 1)',
-                            data: [{{ classroom.attended_sessions }}, 0]   // Dữ liệu cho cột đã học
+                            data: [{{ classroom.attended_sessions }}, 0]
                         },
                         {
                             label: "Tổng",
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',  // Màu đỏ cho tổng buổi học
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
                             borderColor: 'rgba(255, 99, 132, 1)',
-                            data: [0, {{ classroom.total_sessions }}]      // Dữ liệu cho cột tổng số buổi
+                            data: [0, {{ classroom.total_sessions }}]
                         }
                     ]
                 },
@@ -279,7 +279,6 @@
         function updateChart() {
             var selectedClass = document.getElementById("classSelect").value;
     
-            // Xóa biểu đồ nếu đã tồn tại
             if (myChart) {
                 myChart.destroy();
             }
@@ -299,69 +298,52 @@
             }
         }
     
-        var absentData = {
-            labels: [
-                {% for data in classroom.absent_data %}
-                    "{{ data.student_name }}",
-                {% endfor %}
-            ],
-            datasets: [{
-                label: "Vắng (%)",
-                backgroundColor: [
-                    {% for data in classroom.absent_data %}
-                        {% if data.absent_rate > 20 %}
-                            "rgba(255, 99, 132, 0.5)",  // Màu đỏ nếu vắng hơn 20%
-                        {% else %}
-                            "rgba(75, 192, 192, 0.5)",  // Màu xanh nếu vắng dưới 20%
-                        {% endif %}
+        var classAbsentData = {};  // Biến để lưu dữ liệu vắng mặt theo lớp
+
+        // Khởi tạo dữ liệu vắng mặt theo từng lớp từ server
+        {% for class_id, absent_data in class_absent_data.items %}
+            classAbsentData["{{ class_id }}"] = {
+                labels: [
+                    {% for data in absent_data %}
+                        "{{ data.student_name }}",
                     {% endfor %}
                 ],
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1,
-                data: [
-                    {% for data in classroom.absent_data %}
-                        {{ data.absent_rate }},
-                    {% endfor %}
-                ]
-            }]
-        };
-    
+                datasets: [{
+                    label: "Vắng (%)",
+                    backgroundColor: [
+                        {% for data in absent_data %}
+                            {% if data.absent_rate > 20 %}
+                                "rgba(255, 99, 132, 0.2)",  // Màu đỏ nếu vắng hơn 20%
+                            {% else %}
+                                "rgba(75, 192, 192, 0.5)",  // Màu xanh nếu vắng dưới 20%
+                            {% endif %}
+                        {% endfor %}
+                    ],
+                    data: [
+                        {% for data in absent_data %}
+                            {{ data.absent_rate }},
+                        {% endfor %}
+                    ]
+                }]
+            };
+        {% endfor %}
+
         var ctx2 = document.getElementById('absenceChart').getContext('2d');
         var absenceChart;
-    
+
         function updateAbsenceChart() {
             var selectedClass = document.getElementById("absenceClassSelect").value;
-    
-            // Xóa biểu đồ nếu đã tồn tại
+
+            // Xóa biểu đồ cũ nếu có
             if (absenceChart) {
                 absenceChart.destroy();
             }
-    
-            // Reset dữ liệu
-            absentData.labels = [];
-            absentData.datasets[0].data = [];
-            absentData.datasets[0].backgroundColor = [];
-    
-            {% for classroom in teacher_classes %}
-                if (selectedClass === "{{ classroom.class_id }}") {
-                    {% for data in classroom.absent_data %}
-                        absentData.labels.push("{{ data.student_name }}");
-                        absentData.datasets[0].data.push({{ data.absent_rate }});
-                        // Thiết lập màu sắc dựa trên tỷ lệ vắng mặt
-                        {% if data.absent_rate > 20 %}
-                            absentData.datasets[0].backgroundColor.push("rgba(255, 99, 132, 0.2)"); // Màu đỏ nếu vắng hơn 20%
-                        {% else %}
-                            absentData.datasets[0].backgroundColor.push("rgba(75, 192, 192, 0.5)"); // Màu xanh nếu vắng dưới 20%
-                        {% endif %}
-                    {% endfor %}
-                }
-            {% endfor %}
-    
-            // Tạo biểu đồ mới chỉ khi có dữ liệu
-            if (selectedClass) {
+
+            // Nếu lớp được chọn có dữ liệu vắng mặt
+            if (selectedClass && classAbsentData[selectedClass]) {
                 absenceChart = new Chart(ctx2, {
                     type: 'bar',
-                    data: absentData,
+                    data: classAbsentData[selectedClass],
                     options: {
                         scales: {
                             y: {
@@ -374,7 +356,6 @@
             }
         }
     
-        // Kiểm tra và hủy biểu đồ khi tải trang
         window.onload = function() {
             if (myChart) {
                 myChart.destroy();

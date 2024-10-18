@@ -294,11 +294,11 @@ def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
                             continue
                     else:
                         attendance_record[student.student_id] = set()
-                        
+                        formatted_time = current_time.strftime('%H:%M')
                         upload_to_firebase(
-                            frame,  
+                            frame,  # Sử dụng trực tiếp khung hình 'frame' thay vì ghi ra tệp
                             f'result-attendance', 
-                            f'{student.student_id}_{student.name}_{formatted_date}.jpg'
+                            f'{ session.classroom.class_name}_{formatted_time}_{formatted_date}_{student.student_id}_{student.name}.jpg'
                         )
                         lcd = LCD1602()
                         # Hiển thị tên và xác suất lên LCD
