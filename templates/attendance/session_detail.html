@@ -314,6 +314,7 @@
     const recordVideoButton = document.getElementById('recordVideo');
     let mediaRecorder;
     let recordedChunks = [];
+    const class_id = "{{ session.classroom.class_id }}";  // Lấy classID từ session
     const class_name = "{{ session.classroom.class_name }}";  // Lấy className từ session
     const classDate = "{{ session.date|date:'Y-m-d' }}";  // Định dạng ngày
     const startTime = "{{ session.start_time }}";  // Thời gian bắt đầu
@@ -348,7 +349,7 @@
                 mediaRecorder.onstop = () => {
                     const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
                     const formData = new FormData();
-                    const videoName = `${class_name}_${classDate}_${startTime}_${endTime}.webm`;
+                    const videoName = `${class_id}_${class_name}_${classDate}_${startTime}_${endTime}.webm`;
                     formData.append('video', videoBlob, videoName);
 
                     const csrftoken = getCSRFToken();
@@ -399,7 +400,7 @@
     $('#viewVideo').on('click', function() {
         event.preventDefault();
         const timestamp = new Date().getTime();
-        const videoURL = `https://storage.googleapis.com/authentication-28e57.appspot.com/attendance_videos/${class_name}_${classDate}_${startTime}_${endTime}.webm?alt=media&t=${timestamp}`; // Cập nhật đường dẫn video
+        const videoURL = `https://storage.googleapis.com/authentication-28e57.appspot.com/attendance_videos/${class_id}_${class_name}_${classDate}_${startTime}_${endTime}.webm?alt=media&t=${timestamp}`; // Cập nhật đường dẫn video
         document.getElementById('videoSource').src = videoURL;  // Gán URL vào video source
         document.getElementById('videoPlayer').load();  // Tải video mới
         document.getElementById('videoModal').style.display = 'block';  // Hiển thị modal video
