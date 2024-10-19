@@ -312,3 +312,25 @@ def student_attendance_detail(request):
     # Tiến hành kiểm tra ảnh
     response = session_attendance(class_name, time, date, student_id, student_name)
     return response
+
+def upload_video(request):
+    if request.method == 'POST' and request.FILES.get('video'):
+        video_file = request.FILES['video']
+        file_path = f'attendance_videos/{video_file.name}'
+        
+        # Lấy bucket từ Firebase Storage
+        bucket = storage.bucket()
+        
+        # Tạo blob từ bucket
+        blob = bucket.blob(file_path)
+        
+        # Upload video lên Firebase Storage
+        blob.upload_from_file(video_file)
+
+        # Tạo URL có thể truy cập công khai
+        blob.make_public()
+        video_url = blob.public_url
+
+        return JsonResponse({'status': 'success', 'video_url': video_url})
+
+    return JsonResponse({'status': 'fail', 'message': 'No video found'}, status=400)
