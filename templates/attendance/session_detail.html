@@ -34,7 +34,7 @@
       color: #223771;
     }
     /* CSS cho nút và modal */
-    #export, #new3, #recordVideo {
+    #export, #new3, #recordVideo, #viewVideo {
       padding: 5px 10px;
       background-color: #223771;
       color: white;
@@ -156,10 +156,9 @@
             <button id="recordVideo">Quay video</button>
           </a>          
 
-          <a href="#"
-            id="viewVideo">
-            <button style="background: none; border: none; cursor: pointer;">
-                <i class="fas fa-video" style="color: #223771; font-size: 20px;"></i>
+          <a href="#">
+            <button id="viewVideo">
+                Xem lại video
             </button>
           </a>
           <div class="container">
@@ -398,7 +397,9 @@
 
     // Sửa đổi hàm xem video
     $('#viewVideo').on('click', function() {
-        const videoURL = `https://storage.googleapis.com/authentication-28e57.appspot.com/attendance_videos/${class_name}_${classDate}_${startTime}_${endTime}.webm?alt=media`; // Cập nhật đường dẫn video
+        event.preventDefault();
+        const timestamp = new Date().getTime();
+        const videoURL = `https://storage.googleapis.com/authentication-28e57.appspot.com/attendance_videos/${class_name}_${classDate}_${startTime}_${endTime}.webm?alt=media&t=${timestamp}`; // Cập nhật đường dẫn video
         document.getElementById('videoSource').src = videoURL;  // Gán URL vào video source
         document.getElementById('videoPlayer').load();  // Tải video mới
         document.getElementById('videoModal').style.display = 'block';  // Hiển thị modal video
