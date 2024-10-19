@@ -316,14 +316,16 @@ def student_attendance_detail(request):
 def upload_video(request):
     if request.method == 'POST' and request.FILES.get('video'):
         video_file = request.FILES['video']
-        file_path = f'attendance_videos/{video_file.name}'
         
+        # Tạo đường dẫn video theo định dạng
+        file_path = f'attendance_videos/{video_file.name}'
+
         # Lấy bucket từ Firebase Storage
         bucket = storage.bucket()
-        
+
         # Tạo blob từ bucket
         blob = bucket.blob(file_path)
-        
+
         # Upload video lên Firebase Storage
         blob.upload_from_file(video_file)
 

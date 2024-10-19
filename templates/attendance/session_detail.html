@@ -26,6 +26,13 @@
   <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
+    .main-sidebar {
+      background-color: #223771;
+    }
+
+    .m-0 {
+      color: #223771;
+    }
     /* CSS cho nút và modal */
     #export, #new3, #recordVideo {
       padding: 5px 10px;
@@ -149,6 +156,12 @@
             <button id="recordVideo">Quay video</button>
           </a>          
 
+          <a href="#"
+            id="viewVideo">
+            <button style="background: none; border: none; cursor: pointer;">
+                <i class="fas fa-video" style="color: #223771; font-size: 20px;"></i>
+            </button>
+          </a>
           <div class="container">
             <table class="content-table">
               <thead>
@@ -202,11 +215,15 @@
                         style="background: none; border: none; cursor: pointer;">
                         <i class="fas fa-eye" style="color: #223771; font-size: 20px;"></i>
                       </button>
-                      <div class="video-container">
-                        <video controls id="videoPlayer" style="max-width: 100%;">
-                            <source id="videoSource" src="" type="video/webm">
-                            Your browser does not support the video tag.
-                        </video>
+                      <!-- Modal để hiển thị video -->
+                      <div id="videoModal" style="display:none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);">
+                        <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px; text-align: center;">
+                            <span style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;" onclick="closeVideoModal()">&times;</span>
+                            <video controls id="videoPlayer" style="max-width: 100%;">
+                                <source id="videoSource" src="" type="video/webm">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
                       </div>
                       <!-- Modal để hiển thị ảnh -->
                       <div id="imageModal"
@@ -288,6 +305,10 @@
     const recordVideoButton = document.getElementById('recordVideo');
     let mediaRecorder;
     let recordedChunks = [];
+    const class_name = "{{ session.classroom.class_name }}";  // Lấy classId từ session
+    const classDate = "{{ session.date|date:'Y-m-d' }}";  // Định dạng ngày
+    const startTime = "{{ session.start_time }}";  // Thời gian bắt đầu
+    const endTime = "{{ session.end_time }}";  // Thời gian kết thúc
 
     recordVideoButton.addEventListener('click', () => {
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })
@@ -303,9 +324,10 @@
                 mediaRecorder.onstop = () => {
                     const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
                     const formData = new FormData();
-                    formData.append('video', videoBlob, 'classroom_video.webm');
+                    // Tạo tên file video theo định dạng yêu cầu
+                    const videoName = `${class_name}_${classDate}_${startTime}_${endTime}.webm`;
+                    formData.append('video', videoBlob, videoName);
 
-                    // Thêm CSRF token vào request
                     const csrftoken = getCSRFToken();
 
                     $.ajax({
@@ -315,18 +337,19 @@
                         processData: false,
                         contentType: false,
                         headers: {
-                            'X-CSRFToken': csrftoken  // Gửi CSRF token trong header
+                            'X-CSRFToken': csrftoken
                         },
                         success: function(response) {
                             alert('Video uploaded successfully! URL: ' + response.video_url);
                             document.getElementById('videoSource').src = response.video_url;  // Gán URL vào video source
                             document.getElementById('videoPlayer').load();  // Tải video mới
-                            document.querySelector('.video-container').style.display = 'block';  // Hiển thị video
+                            document.getElementById('videoModal').style.display = 'block';  // Hiển thị modal video
                         },
                         error: function(xhr, status, error) {
                             console.error('Error uploading video:', xhr.responseText);
                         }
                     });
+                    stream.getTracks().forEach(track => track.stop());
                 };
 
                 mediaRecorder.start();
@@ -338,6 +361,18 @@
                 console.error('Error accessing camera:', error);
             });
     });
+
+    // Sửa đổi hàm xem video
+    $('#viewVideo').on('click', function() {
+        const videoURL = `https://storage.googleapis.com/authentication-28e57.appspot.com/attendance_videos/${class_name}_${classDate}_${startTime}_${endTime}.webm?alt=media`; // Cập nhật đường dẫn video
+        document.getElementById('videoSource').src = videoURL;  // Gán URL vào video source
+        document.getElementById('videoPlayer').load();  // Tải video mới
+        document.getElementById('videoModal').style.display = 'block';  // Hiển thị modal video
+    });
+
+    function closeVideoModal() {
+      document.getElementById('videoModal').style.display = 'none';  // Đóng modal
+    }
 
   </script>
 
