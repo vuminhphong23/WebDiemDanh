@@ -364,10 +364,10 @@
                             'X-CSRFToken': csrftoken
                         },
                         success: function(response) {
+                          const timestamp = new Date().getTime();  // Tạo timestamp
+                          const videoURL = response.video_url + '?t=' + timestamp;
                             alert('Video uploaded successfully! URL: ' + response.video_url);
-                            document.getElementById('videoSource').src = response.video_url;  // Gán URL vào video source
-                            document.getElementById('videoPlayer').load();  // Tải video mới
-                            document.getElementById('videoModal').style.display = 'block';  // Hiển thị modal video
+                            
                         },
                         error: function(xhr, status, error) {
                             console.error('Error uploading video:', xhr.responseText);
@@ -398,13 +398,21 @@
 
     // Sửa đổi hàm xem video
     $('#viewVideo').on('click', function() {
-        event.preventDefault();
-        const timestamp = new Date().getTime();
-        const videoURL = `https://storage.googleapis.com/authentication-28e57.appspot.com/attendance_videos/${class_id}_${class_name}_${classDate}_${startTime}_${endTime}.webm?alt=media&t=${timestamp}`; // Cập nhật đường dẫn video
-        document.getElementById('videoSource').src = videoURL;  // Gán URL vào video source
-        document.getElementById('videoPlayer').load();  // Tải video mới
-        document.getElementById('videoModal').style.display = 'block';  // Hiển thị modal video
+      event.preventDefault();
+      const timestamp = new Date().getTime();
+      const videoURL = `https://storage.googleapis.com/authentication-28e57.appspot.com/attendance_videos/${class_id}_${class_name}_${classDate}_${startTime}_${endTime}.webm?alt=media&t=${timestamp}`;
+      
+      // Reset src trước khi gán URL mới
+      document.getElementById('videoSource').src = '';
+      document.getElementById('videoPlayer').load();
+  
+      setTimeout(() => {
+          document.getElementById('videoSource').src = videoURL;  // Gán URL mới vào video source
+          document.getElementById('videoPlayer').load();  // Tải lại video
+          document.getElementById('videoModal').style.display = 'block';  // Hiển thị modal
+      }, 100);  // Đặt một khoảng delay nhỏ
     });
+  
 
     function closeVideoModal() {
       document.getElementById('videoModal').style.display = 'none';  // Đóng modal
