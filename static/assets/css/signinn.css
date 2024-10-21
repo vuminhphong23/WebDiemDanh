@@ -19,6 +19,11 @@ input {
   overflow: hidden;
 }
 
+img{
+  width: 100%;
+  height: 100%;
+}
+
 .forms-container {
   position: absolute;
   width: 100%;
