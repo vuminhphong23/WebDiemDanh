@@ -225,7 +225,8 @@ def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
     session = get_object_or_404(AttendanceSession, session_id=session_id)
 
     frame_count = 0  # Đếm số khung hình để giảm tần suất nhận diện
-
+    lcd = None
+    
     while True:
         
         ret, frame = cap.read()
