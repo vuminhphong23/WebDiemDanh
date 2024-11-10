@@ -172,13 +172,11 @@ from .models import AttendanceSession, TblStudents, Attendance
 from .pnhLCD1602 import LCD1602
 from firebase_admin import storage
 
-# Load FaceNet model for embedding extraction
+# Tải mô hình FaceNet để nhúng trích xuất
 embedder = FaceNet()
 facenet_model = embedder.model
 
-redirect_flag = False
-
-# Extract face embeddings from a given frame
+# Trích xuất các phần nhúng khuôn mặt từ một khung nhất định
 def get_face_embeddings(frame):
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # face_recognition cần sử dụng ảnh RGB
     face_locations = face_recognition.face_locations(rgb_frame)  # Phát hiện vị trí khuôn mặt
@@ -210,6 +208,7 @@ def get_attendance_record(session_id):
         attendance_record[student_id].add(date_attended)
     return attendance_record
 
+# Up ảnh tại thời điểm điểm danh lên firebase
 def upload_to_firebase(image, folder, image_name):
     bucket = storage.bucket()
     blob = bucket.blob(f'{folder}/{image_name}')
@@ -217,7 +216,7 @@ def upload_to_firebase(image, folder, image_name):
     blob.upload_from_string(img_encoded.tobytes(), content_type='image/jpeg')
     print(f'Uploaded {image_name} to {folder}.')
     
-
+# Thực hiện điểm danh
 def realtime_face_recognition(model, out_encoder, classroom_id, session_id):    
     cap = cv2.VideoCapture(0)
     confidence_threshold = 80.0  # Ngưỡng xác suất để điểm danh
@@ -234,7 +233,7 @@ def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
             break
         frame = cv2.flip(frame, 1)
 
-        # Chỉ xử lý mỗi 7 khung hình để giảm tải
+        # Chỉ xử lý mỗi 7 khung hình để giảm tải lag
         frame_count += 1
         if frame_count % 7 != 0:
             continue
@@ -341,6 +340,7 @@ def realtime_face_recognition(model, out_encoder, classroom_id, session_id):
     if lcd is not None:
         lcd.close()
 
+# Gọi đến điểm danh
 def diemdanh(request, classroom_id, session_id):
     with open('Face/svm_model/svm_model.pkl', 'rb') as model_file:
         model = pickle.load(model_file)

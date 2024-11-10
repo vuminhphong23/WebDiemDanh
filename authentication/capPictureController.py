@@ -94,7 +94,7 @@ import face_recognition
 from firebase_admin import storage
 import numpy as np
 
-# Function to enhance image by applying denoising and smoothing
+# Làm sạch ảnh
 def enhance_image(image):
     # Làm sạch nhiễu bằng Gaussian Blur
     blurred_image = cv2.GaussianBlur(image, (5, 5), 0)
@@ -104,27 +104,25 @@ def enhance_image(image):
     
     return enhanced_image
 
-# Function to flip and rotate images to increase dataset size
+# Quay lật ảnh tăng sự đa dạng để đào tạo mô hình
 def augment_images(images):
     augmented_images = []
     for image in images:
-        # Flip image vertically
+
         flipped_vertical = cv2.flip(image, 1)
         augmented_images.append(flipped_vertical)
         
-        # Rotate image by 15 degrees clockwise
         rows, cols, _ = image.shape
         rotation_matrix = cv2.getRotationMatrix2D((cols / 2, rows / 2), 15, 1)
         rotated_image = cv2.warpAffine(image, rotation_matrix, (cols, rows))
         augmented_images.append(rotated_image)
         
-        # Rotate image by -15 degrees counterclockwise
         rotation_matrix = cv2.getRotationMatrix2D((cols / 2, rows / 2), -15, 1)
         rotated_image = cv2.warpAffine(image, rotation_matrix, (cols, rows))
         augmented_images.append(rotated_image)
     return augmented_images
 
-# Function to upload images to Firebase
+# Up ảnh lên firebase
 def upload_to_firebase(image, folder, image_name):
     bucket = storage.bucket()
     blob = bucket.blob(f'{folder}/{image_name}')
@@ -132,7 +130,7 @@ def upload_to_firebase(image, folder, image_name):
     blob.upload_from_string(img_encoded.tobytes(), content_type='image/jpeg')
     print(f'Uploaded {image_name} to {folder}.')
 
-# Function to capture and save images with face detection
+# Chụp ảnh (Nhấn c để chụp)
 def capture_images(student_id, name):
     cap = cv2.VideoCapture(0)
     img_count = 0
@@ -166,7 +164,7 @@ def capture_images(student_id, name):
 
     augmented_images = augment_images(captured_images)
 
-    # Save training images (first 2/3) and validation images (last 1/3)
+    # Lưu ảnh với 2/3 vào train và 1/3 vào validation
     split_point = int(len(augmented_images) * 0.67)
     train_images = augmented_images[:split_point]
     val_images = augmented_images[split_point:]
